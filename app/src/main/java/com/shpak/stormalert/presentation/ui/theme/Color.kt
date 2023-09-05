@@ -1,4 +1,4 @@
-package com.shpak.stormalert.ui.theme
+package com.shpak.stormalert.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

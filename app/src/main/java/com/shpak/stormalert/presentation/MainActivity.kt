@@ -1,4 +1,4 @@
-package com.shpak.stormalert
+package com.shpak.stormalert.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.shpak.stormalert.ui.theme.StormAlertTheme
+import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
