@@ -9,50 +9,81 @@ import java.util.Date
 import java.util.Locale
 import kotlin.streams.toList
 
+private val dateRegex = "[A-Z][a-z]{2} *[0-9]{2}".toRegex()
+private val datesRowRegex = "$dateRegex *$dateRegex *$dateRegex".toRegex()
+private val timeRegex = "[0-9]{2}-[0-9]{2}UT".toRegex()
+private val dataRowRegex = "$timeRegex.*".toRegex()
+private val kpValueRegex = "[0-9]{1,2}\\.[0-9]+".toRegex()
+
 fun String.toGeomagneticForecast(): GeomagneticForecast {
-    val dateRegex = "[A-Z][a-z]{2} *[0-9]{2}".toRegex()
-    val datesRowRegex = "$dateRegex *$dateRegex *$dateRegex".toRegex()
-    val timeRegex = "[0-9]{2}-[0-9]{2}UT".toRegex()
-    val dataRowRegex = "$timeRegex.*".toRegex()
-    val kpValueRegex = "[0-9]{1,2}\\.[0-9]+".toRegex()
-
-    val dates = datesRowRegex.find(this)
-        ?: throw MalformedStringException("Provided string does not contain forecast date")
-    val allDataRows = dataRowRegex.findAll(this)
-
-    val datesList = mutableListOf<Date>()
-
-    dateRegex.findAll(dates.value).forEach {
-        val dateFormat = SimpleDateFormat("MMM dd", Locale.US)
-        val date = dateFormat.parse(it.value)?.setCurrentYear()
-            ?: throw MalformedStringException("Provided string does not contain forecast date")
-
-        datesList.add(date)
-    }
-
-    val forecastList = mutableListOf<GeomagneticData>()
-
-    allDataRows.forEach {
-        val forecastHours = timeRegex.find(it.value)
-            ?: throw MalformedStringException("Provided string does not contain forecast time")
-        val dateFormat = SimpleDateFormat("HH", Locale.US)
-        val hoursDate = dateFormat.parse(forecastHours.value)
-            ?: throw MalformedStringException("Provided string does not contain forecast time")
-
-        val kpValues = kpValueRegex.findAll(it.value)
-        if (kpValues.count() < 1) {
-            throw MalformedStringException("Provided string does not contain forecast data")
-        }
-        kpValues.forEachIndexed { i, kpValue ->
-            val time = datesList[i].setHours(hoursDate)
-            forecastList.add(GeomagneticData(time, kpValue.value.toDouble()))
-        }
-    }
+    val forecastDates = retrieveForecastDates()
+    val forecastList = retrieveForecastData(forecastDates)
 
     return GeomagneticForecast(
         null,
-        forecastList.stream().sorted { a, b -> a.date.compareTo(b.date) }.toList()
+        forecastList.stream().sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.toList()
     )
+}
+
+/**
+ * This method is used to parse forecast dates from a raw text response.
+ * Dates are appended to the current year.
+ *
+ * ...
+ * NOAA Kp index breakdown Sep 08-Sep 10 2023
+ *              Sep 08       Sep 09       Sep 10         <--- DATES
+ * 00-03UT       2.67         3.00         2.67
+ * ...
+ */
+private fun String.retrieveForecastDates(): List<Date> {
+    val dateStringFormat = "MMM dd"
+
+    val datesRow = datesRowRegex.find(this)
+        ?: throw MalformedStringException("Provided string does not contain forecast date")
+
+    return mutableListOf<Date>().also { datesList ->
+        dateRegex.findAll(datesRow.value).forEach {
+            val dateFormat = SimpleDateFormat(dateStringFormat, Locale.US)
+            val date = dateFormat.parse(it.value)?.setCurrentYear()
+                ?: throw MalformedStringException("Provided string does not contain forecast date")
+
+            datesList.add(date)
+        }
+    }
+}
+
+/**
+ * This method is used to parse forecast values from a raw text response.
+ * Every forecast entry is returned with corresponding date and time.
+ *
+ * ...
+ * NOAA Kp index breakdown Sep 08-Sep 10 2023
+ *              Sep 08       Sep 09       Sep 10
+ * 00-03UT       2.67         3.00         2.67          <--- FORECAST
+ * ...
+ */
+private fun String.retrieveForecastData(forecastDates: List<Date>): List<GeomagneticData> {
+    val hoursStringFormat = "HH"
+    val allDataRows = dataRowRegex.findAll(this)
+
+    return mutableListOf<GeomagneticData>().also { forecastList ->
+        allDataRows.forEach {
+            val forecastHours = timeRegex.find(it.value)
+                ?: throw MalformedStringException("Provided string does not contain forecast time")
+            val dateFormat = SimpleDateFormat(hoursStringFormat, Locale.US)
+            val hoursDate = dateFormat.parse(forecastHours.value)
+                ?: throw MalformedStringException("Provided string does not contain forecast time")
+
+            val kpValues = kpValueRegex.findAll(it.value)
+            if (kpValues.count() < 1) {
+                throw MalformedStringException("Provided string does not contain forecast data")
+            }
+            kpValues.forEachIndexed { i, kpValue ->
+                val time = forecastDates[i].copyHours(hoursDate)
+                forecastList.add(GeomagneticData(time, kpValue.value.toDouble()))
+            }
+        }
+    }
 }
 
 fun Date.setCurrentYear(): Date {
@@ -63,7 +94,7 @@ fun Date.setCurrentYear(): Date {
     return calendar.time
 }
 
-fun Date.setHours(date: Date): Date {
+fun Date.copyHours(date: Date): Date {
     val calendar = Calendar.getInstance()
     calendar.time = date
     val hours = calendar.get(Calendar.HOUR_OF_DAY)
