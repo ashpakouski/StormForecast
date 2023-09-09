@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 import kotlin.streams.toList
 
 private val dateRegex = "[A-Z][a-z]{2} *[0-9]{2}".toRegex()
@@ -44,6 +45,7 @@ private fun String.retrieveForecastDates(): List<Date> {
     return mutableListOf<Date>().also { datesList ->
         dateRegex.findAll(datesRow.value).forEach {
             val dateFormat = SimpleDateFormat(dateStringFormat, Locale.US)
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val date = dateFormat.parse(it.value)?.setCurrentYear()
                 ?: throw MalformedStringException("Provided string does not contain forecast date")
 
@@ -71,6 +73,7 @@ private fun String.retrieveForecastData(forecastDates: List<Date>): List<Geomagn
             val forecastHours = timeRegex.find(it.value)
                 ?: throw MalformedStringException("Provided string does not contain forecast time")
             val dateFormat = SimpleDateFormat(hoursStringFormat, Locale.US)
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val hoursDate = dateFormat.parse(forecastHours.value)
                 ?: throw MalformedStringException("Provided string does not contain forecast time")
 

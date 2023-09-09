@@ -25,6 +25,10 @@ import androidx.compose.ui.unit.dp
 import com.shpak.stormalert.domain.model.GeomagneticData
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 
 @AndroidEntryPoint
@@ -101,6 +105,11 @@ class MainActivity : ComponentActivity() {
 fun ForecastCard(
     geomagneticData: GeomagneticData
 ) {
+    val simpleDateFormat = SimpleDateFormat("MMM dd HH:mm", Locale.US)
+    val localTime = Date(System.currentTimeMillis())
+    val fromUtc = Date(geomagneticData.date.time + TimeZone.getDefault().getOffset(localTime.time))
+    val formattedDate = simpleDateFormat.format(fromUtc)
+
     Card(
         shape = RoundedCornerShape(10.dp, 10.dp, 5.dp, 5.dp),
         // backgroundColor = MaterialTheme.colors.surface,
@@ -120,7 +129,7 @@ fun ForecastCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = geomagneticData.date.toString(),
+                    text = formattedDate,
                     modifier = Modifier.padding(8.dp, 16.dp)
                 )
                 Text(
