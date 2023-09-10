@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -87,12 +88,14 @@ class MainActivity : ComponentActivity() {
                         } else {
                             LazyColumn(modifier = Modifier.padding(innerPadding)) {
                                 viewModel.state.forecast?.forecast?.let {
-                                    items(it) { gmd ->
+                                    itemsIndexed(it) { i, gmd ->
                                         ForecastCard(
                                             GeomagneticData(
                                                 date = gmd.date,
                                                 kpValue = gmd.kpValue
-                                            )
+                                            ),
+                                            isFirst = i == 0,
+                                            isLast = i == it.size - 1
                                         )
                                     }
                                 }
@@ -107,20 +110,39 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ForecastCard(
-    geomagneticData: GeomagneticData
+    geomagneticData: GeomagneticData,
+    isFirst: Boolean = false,
+    isLast: Boolean = false
 ) {
     val simpleDateFormat = SimpleDateFormat("MMM dd HH:mm", Locale.US)
     val localTime = Date(System.currentTimeMillis())
     val fromUtc = Date(geomagneticData.date.time + TimeZone.getDefault().getOffset(localTime.time))
     val formattedDate = simpleDateFormat.format(fromUtc)
 
+    val defaultCornerRadius = 5.dp
+    val maxCornerRadius = 16.dp
+
+    val shape = if (isFirst) RoundedCornerShape(
+        maxCornerRadius,
+        maxCornerRadius,
+        defaultCornerRadius,
+        defaultCornerRadius
+    )
+    else if (isLast) RoundedCornerShape(
+        defaultCornerRadius,
+        defaultCornerRadius,
+        maxCornerRadius,
+        maxCornerRadius
+    )
+    else RoundedCornerShape(defaultCornerRadius)
+
     Card(
-        shape = RoundedCornerShape(10.dp, 10.dp, 5.dp, 5.dp),
+        shape = shape,
         // backgroundColor = MaterialTheme.colors.surface,
         // elevation = 3.dp,
         colors = CardDefaults.cardColors(),
         modifier = Modifier
-            .padding(4.dp)
+            .padding(12.dp, 2.dp)
             .fillMaxWidth(),
 
         ) {
