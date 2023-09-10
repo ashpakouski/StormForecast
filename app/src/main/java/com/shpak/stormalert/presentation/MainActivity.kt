@@ -118,9 +118,7 @@ fun ForecastCard(
         shape = RoundedCornerShape(10.dp, 10.dp, 5.dp, 5.dp),
         // backgroundColor = MaterialTheme.colors.surface,
         // elevation = 3.dp,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        colors = CardDefaults.cardColors(),
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),
