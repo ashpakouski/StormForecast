@@ -22,7 +22,8 @@ fun String.toGeomagneticForecast(): GeomagneticForecast {
 
     return GeomagneticForecast(
         null,
-        forecastList.stream().sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.toList()
+        forecastList.stream().map { gmd -> GeomagneticData(gmd.date.toLocalTime(), gmd.kpValue) }
+            .sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.toList()
     )
 }
 
@@ -87,6 +88,11 @@ private fun String.retrieveForecastData(forecastDates: List<Date>): List<Geomagn
             }
         }
     }
+}
+
+fun Date.toLocalTime(): Date {
+    val localTime = Date(System.currentTimeMillis())
+    return Date(this.time + TimeZone.getDefault().getOffset(localTime.time))
 }
 
 fun Date.setCurrentYear(): Date {

@@ -16,8 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shpak.stormalert.domain.model.GeomagneticData
-import com.shpak.stormalert.presentation.util.formatUtcDate
-import com.shpak.stormalert.presentation.util.formatUtcTime
+import com.shpak.stormalert.presentation.util.formatTime
 
 @Composable
 fun ForecastCard(
@@ -49,9 +48,8 @@ fun ForecastCard(
         colors = CardDefaults.cardColors(),
         modifier = Modifier
             .padding(vertical = 2.dp)
-            .fillMaxWidth(),
-
-        ) {
+            .fillMaxWidth()
+    ) {
         Box(contentAlignment = Alignment.CenterStart) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -59,7 +57,7 @@ fun ForecastCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = geomagneticData.date.formatUtcTime(),
+                    text = geomagneticData.date.formatTime(),
                     modifier = Modifier.padding(12.dp),
                     fontWeight = FontWeight(500)
                 )

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shpak.stormalert.domain.model.GeomagneticData
-import com.shpak.stormalert.presentation.util.formatUtcDay
+import com.shpak.stormalert.presentation.util.formatDay
 import java.util.Calendar
 
 @Composable
@@ -24,7 +24,7 @@ fun GroupedForecast(forecast: List<GeomagneticData>) {
         dateGroups.values.forEach { forecastGroup ->
             item {
                 Text(
-                    text = forecastGroup.first().date.formatUtcDay(),
+                    text = forecastGroup.first().date.formatDay(),
                     modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
                     fontWeight = FontWeight(550)
                 )
