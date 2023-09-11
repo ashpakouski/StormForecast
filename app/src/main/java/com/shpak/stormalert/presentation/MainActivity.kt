@@ -56,19 +56,8 @@ class MainActivity : ComponentActivity() {
                             if (viewModel.state.isLoading) {
                                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                             } else {
-                                LazyColumn {
-                                    viewModel.state.forecast?.forecast?.let {
-                                        itemsIndexed(it) { i, gmd ->
-                                            ForecastCard(
-                                                GeomagneticData(
-                                                    date = gmd.date,
-                                                    kpValue = gmd.kpValue
-                                                ),
-                                                isFirst = i == 0,
-                                                isLast = i == it.size - 1
-                                            )
-                                        }
-                                    }
+                                viewModel.state.forecast?.forecast?.let {
+                                    GroupedForecast(it)
                                 }
                             }
                         }

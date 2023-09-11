@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.shpak.stormalert.domain.model.GeomagneticData
 import com.shpak.stormalert.presentation.util.formatUtcDate
+import com.shpak.stormalert.presentation.util.formatUtcTime
 
 @Composable
 fun ForecastCard(
@@ -25,7 +26,7 @@ fun ForecastCard(
     isLast: Boolean = false
 ) {
     val defaultCornerRadius = 5.dp
-    val maxCornerRadius = 16.dp
+    val maxCornerRadius = 12.dp
 
     val shape =
         if (isFirst && isLast) RoundedCornerShape(maxCornerRadius)
@@ -47,7 +48,7 @@ fun ForecastCard(
         shape = shape,
         colors = CardDefaults.cardColors(),
         modifier = Modifier
-            .padding(12.dp, 2.dp)
+            .padding(vertical = 2.dp)
             .fillMaxWidth(),
 
         ) {
@@ -58,7 +59,7 @@ fun ForecastCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = geomagneticData.date.formatUtcDate(),
+                    text = geomagneticData.date.formatUtcTime(),
                     modifier = Modifier.padding(12.dp),
                     fontWeight = FontWeight(500)
                 )
