@@ -48,26 +48,26 @@ class MainActivity : ComponentActivity() {
                             )
                         },
                     ) { innerPadding ->
-                        if (viewModel.state.isLoading) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(innerPadding)
-                                    .fillMaxSize()
-                            ) {
+                        Box(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                        ) {
+                            if (viewModel.state.isLoading) {
                                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                            }
-                        } else {
-                            LazyColumn(modifier = Modifier.padding(innerPadding)) {
-                                viewModel.state.forecast?.forecast?.let {
-                                    itemsIndexed(it) { i, gmd ->
-                                        ForecastCard(
-                                            GeomagneticData(
-                                                date = gmd.date,
-                                                kpValue = gmd.kpValue
-                                            ),
-                                            isFirst = i == 0,
-                                            isLast = i == it.size - 1
-                                        )
+                            } else {
+                                LazyColumn {
+                                    viewModel.state.forecast?.forecast?.let {
+                                        itemsIndexed(it) { i, gmd ->
+                                            ForecastCard(
+                                                GeomagneticData(
+                                                    date = gmd.date,
+                                                    kpValue = gmd.kpValue
+                                                ),
+                                                isFirst = i == 0,
+                                                isLast = i == it.size - 1
+                                            )
+                                        }
                                     }
                                 }
                             }
