@@ -15,6 +15,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.shpak.stormalert.R
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +43,10 @@ class MainActivity : ComponentActivity() {
                                     containerColor = MaterialTheme.colorScheme.background
                                 ),
                                 title = {
-                                    Text("Storm Alert")
+                                    Text(
+                                        stringResource(R.string.app_name),
+                                        fontWeight = FontWeight(500)
+                                    )
                                 }
                             )
                         },
