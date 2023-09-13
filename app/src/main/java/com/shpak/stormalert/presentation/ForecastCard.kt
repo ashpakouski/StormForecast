@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,8 +67,11 @@ fun ForecastCard(
                         .padding(horizontal = 12.dp)
                         .weight(4.0F),
                     fontWeight = FontWeight(500),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-                Box(modifier = Modifier.weight(1.0F).alpha(0.75F)) {
+                Box(modifier = Modifier
+                    .weight(1.0F)
+                    .alpha(0.75F)) {
                     StormStrengthIndicator(strength = geomagneticData.kpValue)
                 }
                 Text(
@@ -76,7 +80,8 @@ fun ForecastCard(
                         .padding(horizontal = 12.dp)
                         .weight(1.5F),
                     fontWeight = FontWeight(500),
-                    textAlign = TextAlign.End
+                    textAlign = TextAlign.End,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

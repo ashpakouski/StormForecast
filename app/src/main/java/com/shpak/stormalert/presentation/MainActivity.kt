@@ -61,8 +61,14 @@ class MainActivity : ComponentActivity() {
                             if (viewModel.state.isLoading) {
                                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                             } else {
+                                val forecast = viewModel.state.forecast
                                 LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-                                    viewModel.state.forecast?.forecast?.let {
+                                    forecast?.kpMax24?.let {
+                                        item {
+                                            MaxKpCard(maxKp = it)
+                                        }
+                                    }
+                                    forecast?.forecast?.let {
                                         item {
                                             GroupedForecast(it)
                                         }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Storm Forecast</string>
+    <string name="max_value_title">Max in last 24 hours</string>
 </resources>
