@@ -15,13 +15,14 @@ private val datesRowRegex = "$dateRegex *$dateRegex *$dateRegex".toRegex()
 private val timeRegex = "[0-9]{2}-[0-9]{2}UT".toRegex()
 private val dataRowRegex = "$timeRegex.*".toRegex()
 private val kpValueRegex = "[0-9]{1,2}\\.[0-9]+".toRegex()
+private val maxKpRegex = "(past 24 hours was )([0-9]{1,2}\\.?[0-9]*)( \\()".toRegex()
 
 fun String.toGeomagneticForecast(): GeomagneticForecast {
     val forecastDates = retrieveForecastDates()
     val forecastList = retrieveForecastData(forecastDates)
 
     return GeomagneticForecast(
-        null,
+        retrieveMaxKp(),
         forecastList.stream().map { gmd -> GeomagneticData(gmd.date.toLocalTime(), gmd.kpValue) }
             .sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.toList()
     )
@@ -88,6 +89,17 @@ private fun String.retrieveForecastData(forecastDates: List<Date>): List<Geomagn
             }
         }
     }
+}
+
+/**
+ * This method is used to parse max observed Kp value in last 24 hours from a raw text response.
+ *
+ * ...
+ * The greatest observed 3 hr Kp over the past 24 hours was 2 (below NOAA Scale levels).
+ * ...
+ */
+private fun String.retrieveMaxKp(): Double? {
+    return maxKpRegex.find(this)?.groups?.get(2)?.value?.toDouble()
 }
 
 fun Date.toLocalTime(): Date {
