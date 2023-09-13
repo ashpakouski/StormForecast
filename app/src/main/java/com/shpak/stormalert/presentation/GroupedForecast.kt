@@ -20,25 +20,22 @@ fun GroupedForecast(forecast: List<GeomagneticData>) {
         calendar.get(Calendar.DATE)
     }
 
-    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-        dateGroups.values.forEach { forecastGroup ->
-            item {
-                Text(
-                    text = forecastGroup.first().date.formatDay(),
-                    modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
-                    fontWeight = FontWeight(550)
-                )
-            }
-            itemsIndexed(forecastGroup) { i, gmd ->
-                ForecastCard(
-                    GeomagneticData(
-                        date = gmd.date,
-                        kpValue = gmd.kpValue
-                    ),
-                    isFirst = i == 0,
-                    isLast = i == forecastGroup.size - 1
-                )
-            }
+    dateGroups.values.forEach { forecastGroup ->
+        Text(
+            text = forecastGroup.first().date.formatDay(),
+            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
+            fontWeight = FontWeight(550)
+        )
+
+        forecastGroup.forEachIndexed { i, gmd ->
+            ForecastCard(
+                GeomagneticData(
+                    date = gmd.date,
+                    kpValue = gmd.kpValue
+                ),
+                isFirst = i == 0,
+                isLast = i == forecastGroup.size - 1
+            )
         }
     }
 }

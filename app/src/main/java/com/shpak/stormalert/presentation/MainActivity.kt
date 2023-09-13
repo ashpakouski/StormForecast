@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.shpak.stormalert.R
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,8 +61,12 @@ class MainActivity : ComponentActivity() {
                             if (viewModel.state.isLoading) {
                                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                             } else {
-                                viewModel.state.forecast?.forecast?.let {
-                                    GroupedForecast(it)
+                                LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+                                    viewModel.state.forecast?.forecast?.let {
+                                        item {
+                                            GroupedForecast(it)
+                                        }
+                                    }
                                 }
                             }
                         }
