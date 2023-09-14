@@ -5,6 +5,8 @@ import com.shpak.stormalert.data.network.TextDataSource
 import com.shpak.stormalert.domain.model.GeomagneticForecast
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.util.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DefaultGeomagneticRepository @Inject constructor(
@@ -12,7 +14,9 @@ class DefaultGeomagneticRepository @Inject constructor(
 ) : GeomagneticRepository {
     override suspend fun getGeomagneticForecast(): Resource<GeomagneticForecast> {
         return try {
-            Resource.Success(textDataSource.loadRawData().toGeomagneticForecast())
+            withContext(Dispatchers.Default) {
+                Resource.Success(textDataSource.loadRawData().toGeomagneticForecast())
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Error(e.message ?: "Unknown error")
