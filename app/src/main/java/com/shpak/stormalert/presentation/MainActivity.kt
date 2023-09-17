@@ -73,6 +73,9 @@ class MainActivity : ComponentActivity() {
                                             GroupedForecast(it)
                                         }
                                     }
+                                    item {
+                                        Box(modifier = Modifier.height(16.dp))
+                                    }
                                 }
                             }
                         }
