@@ -1,4 +1,4 @@
-package com.shpak.stormalert.presentation
+package com.shpak.stormalert.presentation.forecast
 
 import com.shpak.stormalert.domain.model.GeomagneticForecast
 

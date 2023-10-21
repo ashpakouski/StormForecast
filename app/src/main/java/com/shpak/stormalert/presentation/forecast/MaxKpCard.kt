@@ -1,4 +1,4 @@
-package com.shpak.stormalert.presentation
+package com.shpak.stormalert.presentation.forecast
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

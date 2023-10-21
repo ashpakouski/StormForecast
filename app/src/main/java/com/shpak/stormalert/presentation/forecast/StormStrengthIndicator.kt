@@ -1,4 +1,4 @@
-package com.shpak.stormalert.presentation
+package com.shpak.stormalert.presentation.forecast
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size

@@ -1,4 +1,4 @@
-package com.shpak.stormalert.presentation
+package com.shpak.stormalert.presentation.forecast
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -34,7 +34,7 @@ import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class ForecastActivity : ComponentActivity() {
     private val viewModel: StormForecastViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)

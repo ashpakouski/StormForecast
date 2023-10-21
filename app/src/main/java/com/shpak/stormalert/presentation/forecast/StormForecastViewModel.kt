@@ -1,4 +1,4 @@
-package com.shpak.stormalert.presentation
+package com.shpak.stormalert.presentation.forecast
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
