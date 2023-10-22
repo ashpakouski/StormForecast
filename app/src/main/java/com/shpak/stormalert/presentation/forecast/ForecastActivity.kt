@@ -9,35 +9,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ErrorOutline
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.shpak.stormalert.R
-import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForecastActivity : ComponentActivity() {
     private val viewModel: StormForecastViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,73 +31,7 @@ class ForecastActivity : ComponentActivity() {
         }
 
         setContent {
-            StormAlertTheme(dynamicColor = false) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                colors = TopAppBarDefaults.smallTopAppBarColors(
-                                    containerColor = MaterialTheme.colorScheme.background
-                                ),
-                                title = {
-                                    Text(
-                                        stringResource(R.string.app_name),
-                                        fontWeight = FontWeight(500)
-                                    )
-                                }
-                            )
-                        },
-                    ) { innerPadding ->
-                        Box(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize()
-                        ) {
-                            if (viewModel.state.isLoading) {
-                                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                            } else {
-                                if (!viewModel.state.isError) {
-                                    val forecast = viewModel.state.forecast
-                                    LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-                                        forecast?.kpMax24?.let {
-                                            item {
-                                                MaxKpCard(maxKp = it)
-                                            }
-                                        }
-                                        forecast?.forecast?.let {
-                                            item {
-                                                GroupedForecast(it)
-                                            }
-                                        }
-                                        item {
-                                            Box(modifier = Modifier.height(16.dp))
-                                        }
-                                    }
-                                } else {
-                                    Column(
-                                        modifier = Modifier.align(Alignment.Center),
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Icon(
-                                            Icons.Rounded.ErrorOutline,
-                                            contentDescription = "",
-                                            modifier = Modifier.size(42.dp)
-                                        )
-                                        Text(
-                                            stringResource(R.string.error_forecast_fetch_failed),
-                                            color = MaterialTheme.colorScheme.onBackground,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.padding(32.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            ForecastListUi(viewModel)
         }
     }
 
