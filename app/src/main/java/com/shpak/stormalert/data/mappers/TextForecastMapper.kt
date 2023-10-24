@@ -8,7 +8,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.streams.toList
+import java.util.stream.Collectors
 
 private val dateRegex = "[A-Z][a-z]{2} *[0-9]{2}".toRegex()
 private val datesRowRegex = "$dateRegex *$dateRegex *$dateRegex".toRegex()
@@ -24,7 +24,7 @@ fun String.toGeomagneticForecast(): GeomagneticForecast {
     return GeomagneticForecast(
         retrieveMaxKp(),
         forecastList.stream().map { gmd -> GeomagneticData(gmd.date.toLocalTime(), gmd.kpValue) }
-            .sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.toList()
+            .sorted { gmd1, gmd2 -> gmd1.date.compareTo(gmd2.date) }.collect(Collectors.toList())
     )
 }
 
