@@ -2,4 +2,5 @@
     <string name="app_name">Storm Forecast</string>
     <string name="max_value_title">Max in last 24 hours</string>
     <string name="error_forecast_fetch_failed">Forecast could not be loaded. Please, check your Internet connection and try again</string>
+    <string name="settings_title">Settings</string>
 </resources>

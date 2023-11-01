@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.shpak.stormalert.presentation.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,8 +32,12 @@ class ForecastActivity : ComponentActivity() {
         }
 
         setContent {
-            ForecastListUi(viewModel)
+            ForecastListUi(viewModel, this::openSettings)
         }
+    }
+
+    private fun openSettings() {
+        startActivity(SettingsActivity.newIntent(this))
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
