@@ -9,7 +9,9 @@ import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class ForecastJobScheduler @Inject constructor(private val application: Application) {
+class ForecastJobScheduler @Inject constructor(
+    private val application: Application
+) {
     companion object {
         private const val FORECAST_JOB_ID = "forecast_job_id"
     }
@@ -17,10 +19,11 @@ class ForecastJobScheduler @Inject constructor(private val application: Applicat
     fun scheduleJob() {
         val workRequest = PeriodicWorkRequest.Builder(
             ForecastDownloadJob::class.java,
-            1L,
-            TimeUnit.DAYS
+            15L,
+            TimeUnit.MINUTES
         ).setConstraints(
-            Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
+            Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
         ).build()
 

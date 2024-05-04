@@ -8,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.shpak.stormalert.presentation.settings.SettingsActivity
