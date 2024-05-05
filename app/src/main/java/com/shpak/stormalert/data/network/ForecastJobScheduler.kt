@@ -19,8 +19,8 @@ class ForecastJobScheduler @Inject constructor(
     fun scheduleJob() {
         val workRequest = PeriodicWorkRequest.Builder(
             ForecastDownloadJob::class.java,
-            15L,
-            TimeUnit.MINUTES
+            1L,
+            TimeUnit.HOURS
         ).setConstraints(
             Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -30,7 +30,8 @@ class ForecastJobScheduler @Inject constructor(
         WorkManager.getInstance(application)
             .enqueueUniquePeriodicWork(
                 FORECAST_JOB_ID,
-                ExistingPeriodicWorkPolicy.KEEP, workRequest
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                workRequest
             )
     }
 

@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -85,7 +86,7 @@ private fun ForecastListScreen(
             ForecastLoadingState(modifier = Modifier.align(Alignment.Center))
         } else {
             if (!viewModel.state.isError) {
-                val forecast = viewModel.state.forecast
+                val forecast = remember { viewModel.state.forecast }
                 ForecastLoadingSucceededState(forecast)
             } else {
                 ForecastLoadingFailedState(modifier = Modifier.align(Alignment.Center))
@@ -107,11 +108,11 @@ private fun ForecastLoadingSucceededState(forecast: GeomagneticForecast?) {
                 MaxKpCard(maxKp = it)
             }
         }
+
         forecast?.forecast?.let {
-            item {
-                GroupedForecast(it)
-            }
+            groupedForecast(it)
         }
+
         item {
             Box(modifier = Modifier.height(16.dp))
         }
