@@ -79,7 +79,7 @@ private fun ForecastListScreen(
 ) {
     Box(
         modifier = Modifier
-            .padding(innerPadding)
+            .padding(top = innerPadding.calculateTopPadding())
             .fillMaxSize()
     ) {
         if (viewModel.state.isLoading) {
@@ -127,7 +127,7 @@ private fun ForecastLoadingFailedState(modifier: Modifier) {
     ) {
         Icon(
             Icons.Rounded.ErrorOutline,
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.size(42.dp)
         )
         Text(
