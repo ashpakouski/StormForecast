@@ -16,12 +16,12 @@ class StormForecastApp : Application(), Configuration.Provider {
     @Inject
     lateinit var forecastJobScheduler: ForecastJobScheduler
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder().setWorkerFactory(workerFactory).build()
-    }
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
 
     override fun onCreate() {
         super.onCreate()
+
         forecastJobScheduler.scheduleJob()
     }
 }
