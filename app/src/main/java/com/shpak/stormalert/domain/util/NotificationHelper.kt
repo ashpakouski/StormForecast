@@ -23,6 +23,7 @@ object NotificationHelper {
         context: Context,
         channelId: String = "ID_DEFAULT",
         channelName: String = "All forecast notifications",
+        title: String? = null,
         text: String? = null
     ) {
 
@@ -38,7 +39,7 @@ object NotificationHelper {
 
         val notificationBuilder =
             NotificationCompat.Builder(context, channelId)
-                .setContentTitle("Info")
+                .setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)

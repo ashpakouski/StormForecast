@@ -19,20 +19,27 @@ class ForecastDownloadJob @AssistedInject constructor(
 ) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
-        val text = when (
+        when (
             val forecast = geomagneticRepository.getGeomagneticForecast()
         ) {
             is Resource.Success -> {
                 val kpIn24Hours = forecast.data?.forecast?.firstOrNull {
-                    it.date.after(Date())
+                    it.date.after(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
                 }
-                "Kp in 24 hours: ${kpIn24Hours?.kpValue} (${kpIn24Hours?.date})"
+                val title = "Kp ${kpIn24Hours?.kpValue} in 24 hours"
+                val text = "Kp in 24 hours: ${kpIn24Hours?.kpValue} (${kpIn24Hours?.date})"
+
+                NotificationHelper.postNotification(appContext, title = title, text = text)
             }
 
-            is Resource.Error -> "Error"
+            is Resource.Error -> {
+                NotificationHelper.postNotification(
+                    appContext,
+                    title = "Error",
+                    text = "Couldn't obtain Kp value"
+                )
+            }
         }
-
-        NotificationHelper.postNotification(appContext, text = text)
 
         return Result.success()
     }
