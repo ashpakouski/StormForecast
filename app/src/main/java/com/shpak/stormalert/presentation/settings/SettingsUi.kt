@@ -7,11 +7,15 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -157,6 +161,69 @@ private fun SettingsSwitch(
                     .padding(vertical = 8.dp)
                     .clickable(onClick = onActionButtonClick)
             )
+        }
+    }
+}
+
+@Composable
+private fun RoundedSettingsSwitch(
+    title: String,
+    subtitle: String? = null,
+    isChecked: Boolean,
+    onCheckedChange: (isChecked: Boolean) -> Unit,
+    actionButtonTitle: String? = null,
+    onActionButtonClick: (() -> Unit)? = null
+) {
+    assert((actionButtonTitle == null && onActionButtonClick == null) || (actionButtonTitle != null && onActionButtonClick != null))
+
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = rememberRipple(color = Color.Black),
+                    onClick = {},
+                )
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1.0f)
+                        .padding(end = 16.dp)
+                ) {
+                    Text(text = title, fontSize = 22.sp)
+
+                    subtitle?.let {
+                        Text(
+                            text = it,
+                            fontSize = 14.sp,
+                            lineHeight = 16.sp,
+                            modifier = Modifier.alpha(0.8f)
+                        )
+                    }
+                }
+
+                Switch(
+                    checked = isChecked,
+                    onCheckedChange = onCheckedChange
+                )
+            }
+
+            if (actionButtonTitle != null && onActionButtonClick != null) {
+                Text(
+                    text = actionButtonTitle,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .clickable(onClick = onActionButtonClick)
+                )
+            }
         }
     }
 }
