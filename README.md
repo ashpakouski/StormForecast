@@ -1,5 +1,7 @@
 # Magnetic Storm Forecast 🔮
 
+<h2>❗️ This project is currently under development. Some functionality may work incorrectly. Feel free to create a new issue to request something specific to be implemented ❗️</h2>
+
 Stay ahead of geomagnetic storms with Geomagnetic Storm Forecast app.
 Receive real-time forecasts, and updates on solar activity to protect your electronics, GPS systems
 and stay informed about potential aurora sightings.
