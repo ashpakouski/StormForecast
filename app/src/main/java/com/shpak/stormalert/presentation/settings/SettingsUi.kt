@@ -1,7 +1,6 @@
 package com.shpak.stormalert.presentation.settings
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,12 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,9 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.shpak.stormalert.R
@@ -73,7 +69,6 @@ private fun SettingsScreen(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .padding(innerPadding)
-            .padding(16.dp)
     ) {
         SettingsSwitch(
             title = "Storm ahead",
@@ -81,7 +76,8 @@ private fun SettingsScreen(
             isChecked = true,
             onCheckedChange = {},
             actionButtonTitle = "Configure alert",
-            onActionButtonClick = {}
+            onActionButtonClick = {},
+            paddingHorizontal = 16.dp
         )
 
         Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
@@ -92,7 +88,8 @@ private fun SettingsScreen(
             isChecked = false,
             onCheckedChange = {},
             actionButtonTitle = "Configure alert",
-            onActionButtonClick = {}
+            onActionButtonClick = {},
+            paddingHorizontal = 16.dp
         )
 
         Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
@@ -103,7 +100,8 @@ private fun SettingsScreen(
             isChecked = true,
             onCheckedChange = {},
             actionButtonTitle = "Configure alert",
-            onActionButtonClick = {}
+            onActionButtonClick = {},
+            paddingHorizontal = 16.dp
         )
     }
 }
@@ -115,115 +113,85 @@ private fun SettingsSwitch(
     isChecked: Boolean,
     onCheckedChange: (isChecked: Boolean) -> Unit,
     actionButtonTitle: String? = null,
-    onActionButtonClick: (() -> Unit)? = null
+    onActionButtonClick: (() -> Unit)? = null,
+    paddingHorizontal: Dp = 0.dp
 ) {
     assert((actionButtonTitle == null && onActionButtonClick == null) || (actionButtonTitle != null && onActionButtonClick != null))
 
     Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.clickable(
-                interactionSource = MutableInteractionSource(),
-                indication = rememberRipple(color = Color.Black),
-                onClick = {},
-            )
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1.0f)
-                    .padding(end = 16.dp)
-            ) {
-                Text(text = title, fontSize = 22.sp)
-
-                subtitle?.let {
-                    Text(
-                        text = it,
-                        fontSize = 14.sp,
-                        lineHeight = 16.sp,
-                        modifier = Modifier.alpha(0.8f)
-                    )
-                }
-            }
-
-            Switch(
-                checked = isChecked,
-                onCheckedChange = onCheckedChange
-            )
-        }
+        SwitchDecorated(
+            title = title,
+            subtitle = subtitle,
+            isChecked = isChecked,
+            onCheckedChange = onCheckedChange,
+            paddingHorizontal = paddingHorizontal
+        )
 
         if (actionButtonTitle != null && onActionButtonClick != null) {
-            Text(
-                text = actionButtonTitle,
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .clickable(onClick = onActionButtonClick)
+            ConfigurationButton(
+                title = actionButtonTitle,
+                onActionButtonClick = onActionButtonClick,
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = paddingHorizontal)
             )
         }
     }
 }
 
 @Composable
-private fun RoundedSettingsSwitch(
+private fun SwitchDecorated(
     title: String,
     subtitle: String? = null,
     isChecked: Boolean,
     onCheckedChange: (isChecked: Boolean) -> Unit,
-    actionButtonTitle: String? = null,
-    onActionButtonClick: (() -> Unit)? = null
+    paddingHorizontal: Dp
 ) {
-    assert((actionButtonTitle == null && onActionButtonClick == null) || (actionButtonTitle != null && onActionButtonClick != null))
-
-    Card(
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable(
-                    interactionSource = MutableInteractionSource(),
-                    indication = rememberRipple(color = Color.Black),
-                    onClick = {},
-                )
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1.0f)
-                        .padding(end = 16.dp)
-                ) {
-                    Text(text = title, fontSize = 22.sp)
-
-                    subtitle?.let {
-                        Text(
-                            text = it,
-                            fontSize = 14.sp,
-                            lineHeight = 16.sp,
-                            modifier = Modifier.alpha(0.8f)
-                        )
-                    }
-                }
-
-                Switch(
-                    checked = isChecked,
-                    onCheckedChange = onCheckedChange
-                )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                onCheckedChange(!isChecked)
             }
+    ) {
+        Spacer(modifier = Modifier.width(paddingHorizontal))
 
-            if (actionButtonTitle != null && onActionButtonClick != null) {
+        Column(
+            modifier = Modifier
+                .weight(1.0f)
+                .padding(end = 16.dp)
+        ) {
+            Text(text = title, fontSize = 22.sp)
+
+            subtitle?.let {
                 Text(
-                    text = actionButtonTitle,
-                    color = MaterialTheme.colorScheme.primary,
+                    text = it,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier
-                        .padding(vertical = 8.dp)
-                        .clickable(onClick = onActionButtonClick)
+                    lineHeight = 16.sp,
+                    modifier = Modifier.alpha(0.8f)
                 )
             }
         }
+
+        Switch(
+            checked = isChecked,
+            onCheckedChange = onCheckedChange
+        )
+
+        Spacer(modifier = Modifier.width(paddingHorizontal))
     }
+}
+
+@Composable
+private fun ConfigurationButton(
+    title: String,
+    onActionButtonClick: (() -> Unit),
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = title,
+        color = MaterialTheme.colorScheme.primary,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+        modifier = modifier.clickable(onClick = onActionButtonClick)
+    )
 }
