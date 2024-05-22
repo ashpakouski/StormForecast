@@ -41,7 +41,7 @@ object NotificationHelper {
             NotificationCompat.Builder(context, channelId)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
 
         notificationManager.notify(1, notificationBuilder.build())
