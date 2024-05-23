@@ -36,6 +36,8 @@ class ForecastActivity : ComponentActivity() {
         setContent {
             ForecastListUi(viewModel, this::openSettings)
         }
+
+        openSettings()
     }
 
     private fun openSettings() {

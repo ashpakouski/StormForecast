@@ -16,7 +16,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,17 +28,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsSwitch(
     @DrawableRes icon: Int,
-    @StringRes iconDesc: Int,
     @StringRes name: Int,
-    state: State<Boolean>,
-    onClick: () -> Unit
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Surface(
         color = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        onClick = onClick,
+        onClick = {
+            onCheckedChange(!isChecked)
+        },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -48,7 +48,7 @@ fun SettingsSwitch(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painterResource(id = icon),
-                    contentDescription = stringResource(id = iconDesc),
+                    contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -61,8 +61,8 @@ fun SettingsSwitch(
             }
             Spacer(modifier = Modifier.weight(1f))
             Switch(
-                checked = state.value,
-                onCheckedChange = { onClick() }
+                checked = isChecked,
+                onCheckedChange = onCheckedChange
             )
         }
     }
