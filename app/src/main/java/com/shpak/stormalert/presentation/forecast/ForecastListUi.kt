@@ -26,6 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,20 +44,24 @@ fun ForecastListUi(viewModel: StormForecastViewModel) {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {
+            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
             Scaffold(
                 topBar = {
                     TopAppBar(
                         colors = TopAppBarDefaults.smallTopAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background
+                            containerColor = MaterialTheme.colorScheme.background,
+                            scrolledContainerColor = Color(0xFF34424F)
                         ),
                         title = {
                             Text(
                                 stringResource(R.string.app_name),
                                 fontWeight = FontWeight(500)
                             )
-                        }
+                        },
+                        scrollBehavior = scrollBehavior
                     )
                 },
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             ) { innerPadding ->
                 ForecastListScreen(viewModel, innerPadding)
             }
