@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -22,11 +23,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -42,30 +44,42 @@ import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 fun ForecastListUi(viewModel: StormForecastViewModel) {
     StormAlertTheme(dynamicColor = false) {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
         ) {
             val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        colors = TopAppBarDefaults.smallTopAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                            scrolledContainerColor = Color(0xFF34424F)
-                        ),
-                        title = {
-                            Text(
-                                stringResource(R.string.app_name),
-                                fontWeight = FontWeight(500)
-                            )
-                        },
-                        scrollBehavior = scrollBehavior
-                    )
+                    AppBar(scrollBehavior)
                 },
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             ) { innerPadding ->
                 ForecastListScreen(viewModel, innerPadding)
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppBar(scrollBehavior: TopAppBarScrollBehavior) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(if (scrollBehavior.state.contentOffset < -3) 8.dp else 0.dp)
+    ) {
+        TopAppBar(
+            colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background
+            ),
+            title = {
+                Text(
+                    stringResource(R.string.app_name),
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            scrollBehavior = scrollBehavior,
+        )
     }
 }
 
@@ -100,6 +114,10 @@ private fun ForecastLoadingState(modifier: Modifier) {
 @Composable
 private fun ForecastLoadingSucceededState(forecast: GeomagneticForecast?) {
     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         forecast?.kpMax24?.let {
             item {
                 MaxKpCard(maxKp = it)
