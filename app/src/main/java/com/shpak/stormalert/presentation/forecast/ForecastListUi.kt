@@ -3,28 +3,34 @@ package com.shpak.stormalert.presentation.forecast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,40 +41,45 @@ import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForecastListUi(
-    viewModel: StormForecastViewModel,
-    onOpenSettings: () -> Unit
-) {
+fun ForecastListUi(viewModel: StormForecastViewModel) {
     StormAlertTheme(dynamicColor = false) {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
         ) {
+            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
             Scaffold(
                 topBar = {
-                    TopAppBar(
-                        colors = TopAppBarDefaults.smallTopAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background
-                        ),
-                        title = {
-                            Text(
-                                stringResource(R.string.app_name),
-                                fontWeight = FontWeight(500)
-                            )
-                        },
-                        actions = {
-                            IconButton(onClick = onOpenSettings) {
-                                Icon(
-                                    imageVector = Icons.Filled.Settings,
-                                    contentDescription = stringResource(R.string.settings_title)
-                                )
-                            }
-                        }
-                    )
+                    AppBar(scrollBehavior)
                 },
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             ) { innerPadding ->
                 ForecastListScreen(viewModel, innerPadding)
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AppBar(scrollBehavior: TopAppBarScrollBehavior) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(if (scrollBehavior.state.contentOffset < -3) 8.dp else 0.dp)
+    ) {
+        TopAppBar(
+            colors = TopAppBarDefaults.smallTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background
+            ),
+            title = {
+                Text(
+                    stringResource(R.string.app_name),
+                    fontWeight = FontWeight.Medium
+                )
+            },
+            scrollBehavior = scrollBehavior,
+        )
     }
 }
 
@@ -103,6 +114,10 @@ private fun ForecastLoadingState(modifier: Modifier) {
 @Composable
 private fun ForecastLoadingSucceededState(forecast: GeomagneticForecast?) {
     LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
         forecast?.kpMax24?.let {
             item {
                 MaxKpCard(maxKp = it)
@@ -114,7 +129,7 @@ private fun ForecastLoadingSucceededState(forecast: GeomagneticForecast?) {
         }
 
         item {
-            Box(modifier = Modifier.height(16.dp))
+            NavigationBarSpacer()
         }
     }
 }
@@ -137,4 +152,16 @@ private fun ForecastLoadingFailedState(modifier: Modifier) {
             modifier = Modifier.padding(32.dp)
         )
     }
+}
+
+@Composable
+private fun NavigationBarSpacer() {
+    val density = LocalDensity.current
+    val navigationBarHeight = with(density) {
+        WindowInsets.navigationBars.getBottom(this).toDp()
+    }.let {
+        if (it.value > 0.0f) it else 16.dp
+    }
+
+    Spacer(modifier = Modifier.height(navigationBarHeight))
 }
