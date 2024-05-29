@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import com.shpak.stormalert.presentation.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,9 +20,13 @@ class ForecastActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            ForecastListUi(viewModel)
+            ForecastListUi(viewModel, this::openSettings)
         }
 
         openSettings()
+    }
+
+    private fun openSettings() {
+        startActivity(SettingsActivity.newIntent(this))
     }
 }
