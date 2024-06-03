@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,13 +38,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForecastListUi(viewModel: StormForecastViewModel, onOpenSettings: () -> Unit) {
+fun ForecastListScreen(
+    onOpenSettings: () -> Unit,
+    viewModel: StormForecastViewModel = hiltViewModel(),
+) {
+    LaunchedEffect(Unit) {
+        viewModel.loadForecast()
+    }
+
     StormAlertTheme(dynamicColor = false) {
         Surface(
             modifier = Modifier.fillMaxSize()

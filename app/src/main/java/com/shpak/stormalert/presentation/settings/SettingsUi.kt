@@ -29,12 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsUi(viewModel: SettingsViewModel) {
+fun SettingsUi(
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     StormAlertTheme(dynamicColor = false) {
         Surface(
             modifier = Modifier.fillMaxSize(),
