@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.shpak.stormalert.presentation.forecast.ForecastListScreen
-import com.shpak.stormalert.presentation.settings.SettingsUi
+import com.shpak.stormalert.presentation.settings.SettingsScreen
 import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     companion object {
+
+        // FIXME: Temporary implementation
         object Route {
             const val FORECAST_LIST = "forecast_list"
             const val SETTINGS = "settings"
@@ -31,7 +33,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            StormAlertTheme {
+            StormAlertTheme(dynamicColor = false) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
 
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Route.SETTINGS) {
-                            SettingsUi()
+                            SettingsScreen()
                         }
                     }
                 }

@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -41,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
-import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,21 +51,15 @@ fun ForecastListScreen(
         viewModel.loadForecast()
     }
 
-    StormAlertTheme(dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-            Scaffold(
-                topBar = {
-                    AppBar(scrollBehavior, onOpenSettings)
-                },
-                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            ) { innerPadding ->
-                ForecastListScreen(viewModel, innerPadding)
-            }
-        }
+    Scaffold(
+        topBar = {
+            AppBar(scrollBehavior, onOpenSettings)
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) { innerPadding ->
+        ForecastListScreen(viewModel, innerPadding)
     }
 }
 
