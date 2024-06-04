@@ -13,18 +13,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,34 +37,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
-import com.shpak.stormalert.presentation.ui.theme.StormAlertTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForecastListUi(viewModel: StormForecastViewModel) {
-    StormAlertTheme(dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+fun ForecastListScreen(
+    onOpenSettings: () -> Unit,
+    viewModel: StormForecastViewModel = hiltViewModel(),
+) {
+    LaunchedEffect(Unit) {
+        viewModel.loadForecast()
+    }
 
-            Scaffold(
-                topBar = {
-                    AppBar(scrollBehavior)
-                },
-                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            ) { innerPadding ->
-                ForecastListScreen(viewModel, innerPadding)
-            }
-        }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    Scaffold(
+        topBar = {
+            AppBar(scrollBehavior, onOpenSettings)
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) { innerPadding ->
+        ForecastListScreen(viewModel, innerPadding)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AppBar(scrollBehavior: TopAppBarScrollBehavior) {
+private fun AppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onOpenSettings: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,6 +85,14 @@ private fun AppBar(scrollBehavior: TopAppBarScrollBehavior) {
                 )
             },
             scrollBehavior = scrollBehavior,
+            actions = {
+                IconButton(onClick = onOpenSettings) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = stringResource(R.string.settings_title)
+                    )
+                }
+            }
         )
     }
 }
