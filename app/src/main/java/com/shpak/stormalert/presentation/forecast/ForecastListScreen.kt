@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
+import com.shpak.stormalert.presentation.dialogs.NotificationsPermissionConsentDialogRegular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,7 +60,7 @@ fun ForecastListScreen(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
-        ForecastListScreen(viewModel, innerPadding)
+        ForecastScreen(viewModel, innerPadding)
     }
 }
 
@@ -98,7 +99,7 @@ private fun AppBar(
 }
 
 @Composable
-private fun ForecastListScreen(
+private fun ForecastScreen(
     viewModel: StormForecastViewModel,
     innerPadding: PaddingValues
 ) {
@@ -111,8 +112,9 @@ private fun ForecastListScreen(
             ForecastLoadingState(modifier = Modifier.align(Alignment.Center))
         } else {
             if (!viewModel.state.isError) {
-                val forecast = remember { viewModel.state.forecast }
-                ForecastLoadingSucceededState(forecast)
+                val state = remember { viewModel.state }
+                NotificationsPermissionConsentDialogRegular()
+                ForecastLoadingSucceededState(state.forecast)
             } else {
                 ForecastLoadingFailedState(modifier = Modifier.align(Alignment.Center))
             }
