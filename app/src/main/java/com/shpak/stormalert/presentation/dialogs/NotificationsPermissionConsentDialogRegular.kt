@@ -16,46 +16,54 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.shpak.stormalert.presentation.ui.theme.DialogTheme
 
 @Composable
 fun NotificationsPermissionConsentDialogRegular() {
-    AlertDialog(
-        icon = {
-            Icon(
-                imageVector = Icons.Filled.Notifications,
-                contentDescription = null,
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        onDismissRequest = { },
-        title = {
-            Text(
-                text = "Want to stay ahead of Magnetic Storms?",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        },
-        text = {
-            Text(
-                text = "Get quick updates on geomagnetic activity like upcoming storms, Kp index changes and daily forecasts. You can adjust your notifications anytime in settings.",
-                fontSize = 14.sp
-            )
-        },
-        confirmButton = {
-            Button(onClick = {
+    DialogTheme {
+        AlertDialog(
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Notifications,
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            onDismissRequest = { },
+            title = {
+                Text(
+                    text = "Want to stay ahead of Magnetic Storms?",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            },
+            text = {
+                Text(
+                    text = "Get quick updates on geomagnetic activity like upcoming storms, Kp index changes and daily forecasts. You can adjust your notifications anytime in settings.",
+                    fontSize = 14.sp
+                )
+            },
+            confirmButton = {
+                Button(onClick = {
 
-            }) {
-                Text("Yes, notify me")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = { }) {
-                Text("No, thanks")
-            }
-        },
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
+                }) {
+                    Text(
+                        text = "Yes, notify me",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { }) {
+                    Text(
+                        text = "No, thanks",
+                    )
+                }
+            },
+            properties = DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true
+            )
         )
-    )
+    }
 }
