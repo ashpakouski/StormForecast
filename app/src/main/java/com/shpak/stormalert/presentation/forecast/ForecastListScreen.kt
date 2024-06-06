@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
-import com.shpak.stormalert.presentation.dialogs.NotificationsPermissionConsentDialogRegular
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +112,6 @@ private fun ForecastScreen(
         } else {
             if (!viewModel.state.isError) {
                 val state = remember { viewModel.state }
-                NotificationsPermissionConsentDialogRegular()
                 ForecastLoadingSucceededState(state.forecast)
             } else {
                 ForecastLoadingFailedState(modifier = Modifier.align(Alignment.Center))

@@ -12,14 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
+import com.shpak.stormalert.R
 import com.shpak.stormalert.presentation.ui.theme.DialogTheme
 
 @Composable
-fun NotificationsPermissionConsentDialogRegular() {
+fun PreNotificationsPermissionRequestDialog(
+    onClickPositive: () -> Unit,
+    onClickNegative: () -> Unit
+) {
     DialogTheme {
         AlertDialog(
             icon = {
@@ -29,41 +33,49 @@ fun NotificationsPermissionConsentDialogRegular() {
                     modifier = Modifier.size(32.dp)
                 )
             },
-            onDismissRequest = { },
             title = {
                 Text(
-                    text = "Want to stay ahead of Magnetic Storms?",
+                    text = stringResource(R.string.pre_notifications_permission_request_dialog_title),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
             },
             text = {
                 Text(
-                    text = "Get quick updates on geomagnetic activity like upcoming storms, Kp index changes and daily forecasts. You can adjust your notifications anytime in settings.",
+                    text = stringResource(R.string.pre_notifications_permission_request_dialog_description),
                     fontSize = 14.sp
                 )
             },
             confirmButton = {
-                Button(onClick = {
-
-                }) {
-                    Text(
-                        text = "Yes, notify me",
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                ButtonPositive(onClick = onClickPositive)
             },
             dismissButton = {
-                TextButton(onClick = { }) {
-                    Text(
-                        text = "No, thanks",
-                    )
-                }
+                ButtonNegative(onClick = onClickNegative)
             },
-            properties = DialogProperties(
-                dismissOnBackPress = true,
-                dismissOnClickOutside = true
-            )
+            onDismissRequest = onClickNegative
+        )
+    }
+}
+
+@Composable
+private fun ButtonPositive(onClick: () -> Unit) {
+    Button(
+        onClick = onClick
+    ) {
+        Text(
+            text = stringResource(R.string.pre_notifications_permission_request_dialog_button_positive),
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    }
+}
+
+@Composable
+private fun ButtonNegative(onClick: () -> Unit) {
+    TextButton(
+        onClick = onClick
+    ) {
+        Text(
+            text = stringResource(R.string.pre_notifications_permission_request_dialog_button_negative),
         )
     }
 }

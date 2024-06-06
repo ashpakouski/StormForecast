@@ -4,4 +4,10 @@
     <string name="error_forecast_fetch_failed">Forecast could not be loaded. Please, check your Internet connection and try again</string>
     <string name="settings_title">Settings</string>
     <string name="settings_group_notifications">Notifications</string>
+
+    <!--  Pre notifications permission request dialog  -->
+    <string name="pre_notifications_permission_request_dialog_title">Want to stay ahead of Magnetic Storms?</string>
+    <string name="pre_notifications_permission_request_dialog_description">Get quick updates on geomagnetic activity like upcoming storms, Kp index changes and daily forecasts. You can adjust your notifications anytime in settings.</string>
+    <string name="pre_notifications_permission_request_dialog_button_positive">Yes, notify me</string>
+    <string name="pre_notifications_permission_request_dialog_button_negative">No, thanks</string>
 </resources>
