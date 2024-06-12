@@ -94,8 +94,9 @@ dependencies {
     // Icons
     implementation "androidx.compose.material:material-icons-extended:1.5.1"
 
-    // Preferences
+    // Local data
     implementation "androidx.preference:preference-ktx:1.2.1"
+    implementation "androidx.datastore:datastore-preferences:1.1.1"
 
     // Navigation
     def nav_version = "2.7.7"

@@ -5,8 +5,10 @@ import com.shpak.stormalert.data.network.TextDataSource
 import com.shpak.stormalert.data.network.TextGeomagneticDataRepository
 import com.shpak.stormalert.data.repository.AppSettingsRepository
 import com.shpak.stormalert.data.repository.DefaultGeomagneticRepository
+import com.shpak.stormalert.data.repository.DefaultUiInteractionRepository
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.repository.SettingsRepository
+import com.shpak.stormalert.domain.repository.UiInteractionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +19,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideUiInteractionRepository(@ApplicationContext context: Context): UiInteractionRepository {
+        return DefaultUiInteractionRepository(context)
+    }
 
     @Provides
     @Singleton
