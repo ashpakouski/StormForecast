@@ -49,8 +49,6 @@ fun PermissionRequestTemplate(
         }
     }
 
-    val updateStatus: () -> Unit = { updateStatus() }
-
     val permissionResultLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { _ ->
@@ -64,12 +62,12 @@ fun PermissionRequestTemplate(
     }
 
     ActivityLifecycle(
-        onStart = updateStatus
+        onStart = { updateStatus() }
     )
 
     when (viewModel.state) {
         NOT_REQUESTED -> onNotRequested?.invoke(::launchRequest) ?: SideEffect { launchRequest() }
-        SHOW_RATIONALE -> onRationale?.invoke(::launchRequest) ?: SideEffect { launchRequest() }
+        SHOW_RATIONALE -> onRationale?.invoke(::launchRequest)
         PERMANENTLY_DENIED -> onPermanentlyDenied?.invoke(context::openAppSettings)
         GRANTED -> onGranted?.invoke()
     }
