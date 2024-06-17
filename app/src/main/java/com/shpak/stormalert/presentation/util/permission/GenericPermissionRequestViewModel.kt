@@ -12,7 +12,7 @@ class GenericPermissionRequestViewModel @Inject constructor(
     // Event logger
 ) : ViewModel() {
 
-    var state by mutableStateOf(PermissionRequestState.NOT_REQUESTED)
+    var state by mutableStateOf(PermissionRequestState.UNSPECIFIED)
         private set
 
     private var isPermissionRequested = false
@@ -25,7 +25,7 @@ class GenericPermissionRequestViewModel @Inject constructor(
         state = PermissionRequestState.SHOW_RATIONALE
     }
 
-    fun onPermanentlyDenied() {
+    fun onPermanentlyDeniedOrNotRequested() {
         state = if (isPermissionRequested)
             PermissionRequestState.PERMANENTLY_DENIED else PermissionRequestState.NOT_REQUESTED
     }

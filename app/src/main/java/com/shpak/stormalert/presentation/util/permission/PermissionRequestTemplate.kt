@@ -19,6 +19,7 @@ import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.
 import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.NOT_REQUESTED
 import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.PERMANENTLY_DENIED
 import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.SHOW_RATIONALE
+import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.UNSPECIFIED
 
 @Composable
 fun PermissionRequestTemplate(
@@ -45,7 +46,7 @@ fun PermissionRequestTemplate(
         when {
             isPermissionGranted -> viewModel.onGranted()
             shouldShowRationale -> viewModel.onShouldShowRationale()
-            else -> viewModel.onPermanentlyDenied()
+            else -> viewModel.onPermanentlyDeniedOrNotRequested()
         }
     }
 
@@ -70,6 +71,7 @@ fun PermissionRequestTemplate(
         SHOW_RATIONALE -> onRationale?.invoke(::launchRequest)
         PERMANENTLY_DENIED -> onPermanentlyDenied?.invoke(context::openAppSettings)
         GRANTED -> onGranted?.invoke()
+        UNSPECIFIED -> Unit
     }
 }
 

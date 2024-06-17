@@ -1,5 +1,7 @@
 package com.shpak.stormalert.presentation.forecast
 
+import android.Manifest
+import android.os.Build
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
+import com.shpak.stormalert.presentation.dialogs.PreNotificationsPermissionRequestDialog
+import com.shpak.stormalert.presentation.util.permission.PermissionRequestTemplate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,6 +64,34 @@ fun ForecastListScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { innerPadding ->
         ForecastScreen(viewModel, innerPadding)
+        NotificationsPermissionRequestFlow(viewModel)
+    }
+}
+
+@Composable
+private fun NotificationsPermissionRequestFlow(viewModel: StormForecastViewModel) {
+    if (viewModel.state.isPreNotificationsPermissionDialogActive) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            PermissionRequestTemplate(
+                permission = Manifest.permission.POST_NOTIFICATIONS,
+                onNotRequested = { onProceed ->
+                    PreNotificationsPermissionRequestDialog(
+                        onClickPositive = {
+                            viewModel.onPreNotificationsPermissionDialogResult(true)
+                            onProceed()
+                        },
+                        onClickNegative = {
+                            viewModel.onPreNotificationsPermissionDialogResult(false)
+                        }
+                    )
+                }
+            )
+        } else {
+            PreNotificationsPermissionRequestDialog(
+                onClickPositive = { viewModel.onPreNotificationsPermissionDialogResult(true) },
+                onClickNegative = { viewModel.onPreNotificationsPermissionDialogResult(false) }
+            )
+        }
     }
 }
 
