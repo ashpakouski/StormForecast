@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
+import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
 import com.shpak.stormalert.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class StormForecastViewModel @Inject constructor(
     private val geomagneticRepository: GeomagneticRepository,
-    private val uiInteractionRepository: UiInteractionRepository
+    private val uiInteractionRepository: UiInteractionRepository,
+    private val notificationSettingsRepository: NotificationSettingsRepository
 ) : ViewModel() {
 
     var state by mutableStateOf(StormForecastState())
@@ -46,6 +48,7 @@ class StormForecastViewModel @Inject constructor(
     fun onPreNotificationsPermissionDialogResult(isRequestApproved: Boolean) {
         viewModelScope.launch {
             uiInteractionRepository.setPreNotificationPermissionDialogShown()
+            notificationSettingsRepository.setNotificationsEnabled(isRequestApproved)
         }
 
         state = state.copy(isPreNotificationsPermissionDialogActive = false)

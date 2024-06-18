@@ -3,11 +3,11 @@ package com.shpak.stormalert.di
 import android.content.Context
 import com.shpak.stormalert.data.network.TextDataSource
 import com.shpak.stormalert.data.network.TextGeomagneticDataRepository
-import com.shpak.stormalert.data.repository.AppSettingsRepository
+import com.shpak.stormalert.data.repository.AppNotificationSettingsRepository
 import com.shpak.stormalert.data.repository.DefaultGeomagneticRepository
 import com.shpak.stormalert.data.repository.DefaultUiInteractionRepository
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
-import com.shpak.stormalert.domain.repository.SettingsRepository
+import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
 import dagger.Module
 import dagger.Provides
@@ -40,7 +40,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository {
-        return AppSettingsRepository(context)
+    fun provideSettingsRepository(@ApplicationContext context: Context): NotificationSettingsRepository {
+        return AppNotificationSettingsRepository(context)
     }
 }
