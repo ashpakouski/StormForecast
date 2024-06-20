@@ -9,8 +9,8 @@ import com.shpak.stormalert.data.repository.DefaultUiInteractionRepository
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
@@ -18,29 +18,35 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+abstract class AppModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideUiInteractionRepository(@ApplicationContext context: Context): UiInteractionRepository {
-        return DefaultUiInteractionRepository(context)
-    }
+    abstract fun bindUiInteractionRepository(
+        uiInteractionRepository: DefaultUiInteractionRepository
+    ): UiInteractionRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideTextGeomagneticDataSource(): TextDataSource {
-        return TextGeomagneticDataRepository()
-    }
+    abstract fun bindTextGeomagneticDataSource(
+        textGeomagneticDataRepository: TextGeomagneticDataRepository
+    ): TextDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideGeomagneticRepository(textDataSource: TextDataSource): GeomagneticRepository {
-        return DefaultGeomagneticRepository(textDataSource)
-    }
+    abstract fun bindGeomagneticRepository(
+        geomagneticRepository: DefaultGeomagneticRepository
+    ): GeomagneticRepository
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideSettingsRepository(@ApplicationContext context: Context): NotificationSettingsRepository {
-        return AppNotificationSettingsRepository(context)
-    }
+    abstract fun provideSettingsRepository(
+        notificationSettingsRepository: AppNotificationSettingsRepository
+    ): NotificationSettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindContext(
+        @ApplicationContext context: Context
+    ): Context
 }
