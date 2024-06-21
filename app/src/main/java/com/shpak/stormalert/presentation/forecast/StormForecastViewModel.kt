@@ -1,10 +1,12 @@
 package com.shpak.stormalert.presentation.forecast
 
+import android.os.Build
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shpak.stormalert.data.util.BackgroundWorkScheduler
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
@@ -17,7 +19,8 @@ import javax.inject.Inject
 class StormForecastViewModel @Inject constructor(
     private val geomagneticRepository: GeomagneticRepository,
     private val uiInteractionRepository: UiInteractionRepository,
-    private val notificationSettingsRepository: NotificationSettingsRepository
+    private val notificationSettingsRepository: NotificationSettingsRepository,
+    private val backgroundWorkScheduler: BackgroundWorkScheduler
 ) : ViewModel() {
 
     var state by mutableStateOf(StormForecastState())
@@ -52,5 +55,13 @@ class StormForecastViewModel @Inject constructor(
         }
 
         state = state.copy(isPreNotificationsPermissionDialogActive = false)
+
+        if (isRequestApproved && (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)) {
+            onNotificationsPermissionGranted()
+        }
+    }
+
+    fun onNotificationsPermissionGranted() {
+        backgroundWorkScheduler.scheduleJob()
     }
 }

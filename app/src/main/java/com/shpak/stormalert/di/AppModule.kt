@@ -40,7 +40,7 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun provideSettingsRepository(
+    abstract fun bindSettingsRepository(
         notificationSettingsRepository: AppNotificationSettingsRepository
     ): NotificationSettingsRepository
 
