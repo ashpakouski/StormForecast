@@ -3,6 +3,7 @@ package com.shpak.stormalert.data.util
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import java.util.Calendar
@@ -12,24 +13,24 @@ import javax.inject.Inject
 class BackgroundWorkScheduler @Inject constructor(
     context: Context
 ) {
-
     private val workManager = WorkManager.getInstance(context)
 
     fun scheduleJob() {
         val testJobClass = TestWorkerJob::class.java
         val testJobId = "test_job_id"
 
-        val targetHour = 22
-        val targetMinute = 47
-        val targetOffsetMinutes = targetHour * 60 + targetMinute
+        val targetHour = 20
+        val targetMinute = 0
+        val targetOffsetSeconds = targetHour * 60 * 60 + targetMinute * 60
 
         val calendar = Calendar.getInstance()
         val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
         val currentMinute = calendar.get(Calendar.MINUTE)
-        val currentOffsetMinutes = currentHour * 60 + currentMinute
+        val currentSecond = calendar.get(Calendar.SECOND)
+        val currentOffsetSeconds = currentHour * 60 * 60 + currentMinute * 60 + currentSecond
 
-        val initialDelayMinutes = targetOffsetMinutes - currentOffsetMinutes +
-                if (targetOffsetMinutes > currentOffsetMinutes) 0 else 24 * 60
+        val initialDelaySeconds = targetOffsetSeconds - currentOffsetSeconds +
+                if (targetOffsetSeconds > currentOffsetSeconds) 0 else 24 * 60 * 60
 
         val workRequest = PeriodicWorkRequest.Builder(
             testJobClass,
@@ -37,9 +38,9 @@ class BackgroundWorkScheduler @Inject constructor(
             TimeUnit.DAYS
         ).setConstraints(
             Constraints.Builder()
-                // .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
-        )//.setInitialDelay(initialDelayMinutes.toLong(), TimeUnit.MINUTES)
+        ).setInitialDelay(initialDelaySeconds.toLong(), TimeUnit.SECONDS)
             .build()
 
         workManager.enqueueUniquePeriodicWork(

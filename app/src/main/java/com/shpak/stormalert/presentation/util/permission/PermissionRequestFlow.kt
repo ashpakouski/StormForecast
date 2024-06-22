@@ -22,7 +22,7 @@ import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.
 import com.shpak.stormalert.presentation.util.permission.PermissionRequestState.UNSPECIFIED
 
 @Composable
-fun PermissionRequestTemplate(
+fun PermissionRequestFlow(
     permission: String,
     viewModel: GenericPermissionRequestViewModel = hiltViewModel(),
     onNotRequested: (@Composable (onProceed: () -> Unit) -> Unit)? = null,

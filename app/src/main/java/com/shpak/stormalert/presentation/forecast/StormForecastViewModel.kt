@@ -56,12 +56,12 @@ class StormForecastViewModel @Inject constructor(
 
         state = state.copy(isPreNotificationsPermissionDialogActive = false)
 
-        if (isRequestApproved && (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)) {
-            onNotificationsPermissionGranted()
+        if (isRequestApproved) {
+            scheduleTestWork()
         }
     }
 
-    fun onNotificationsPermissionGranted() {
+    private fun scheduleTestWork() {
         backgroundWorkScheduler.scheduleJob()
     }
 }

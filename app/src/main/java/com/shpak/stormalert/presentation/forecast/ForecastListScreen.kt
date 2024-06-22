@@ -43,7 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
 import com.shpak.stormalert.domain.model.GeomagneticForecast
 import com.shpak.stormalert.presentation.dialogs.PreNotificationsPermissionRequestDialog
-import com.shpak.stormalert.presentation.util.permission.PermissionRequestTemplate
+import com.shpak.stormalert.presentation.util.permission.PermissionRequestFlow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,11 +70,11 @@ fun ForecastListScreen(
 
 @Composable
 private fun NotificationsPermissionRequestFlow(viewModel: StormForecastViewModel) {
-    if (viewModel.state.isPreNotificationsPermissionDialogActive) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            PermissionRequestTemplate(
-                permission = Manifest.permission.POST_NOTIFICATIONS,
-                onNotRequested = { onProceed ->
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        PermissionRequestFlow(
+            permission = Manifest.permission.POST_NOTIFICATIONS,
+            onNotRequested = { onProceed ->
+                if (viewModel.state.isPreNotificationsPermissionDialogActive) {
                     PreNotificationsPermissionRequestDialog(
                         onClickPositive = {
                             viewModel.onPreNotificationsPermissionDialogResult(true)
@@ -85,13 +85,13 @@ private fun NotificationsPermissionRequestFlow(viewModel: StormForecastViewModel
                         }
                     )
                 }
-            )
-        } else {
-            PreNotificationsPermissionRequestDialog(
-                onClickPositive = { viewModel.onPreNotificationsPermissionDialogResult(true) },
-                onClickNegative = { viewModel.onPreNotificationsPermissionDialogResult(false) }
-            )
-        }
+            }
+        )
+    } else if (viewModel.state.isPreNotificationsPermissionDialogActive) {
+        PreNotificationsPermissionRequestDialog(
+            onClickPositive = { viewModel.onPreNotificationsPermissionDialogResult(true) },
+            onClickNegative = { viewModel.onPreNotificationsPermissionDialogResult(false) }
+        )
     }
 }
 
