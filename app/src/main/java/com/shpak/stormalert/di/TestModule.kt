@@ -1,7 +1,7 @@
 package com.shpak.stormalert.di
 
 import android.content.Context
-import com.shpak.stormalert.data.util.BackgroundWorkScheduler
+import com.shpak.stormalert.data.util.DailySummaryWorkScheduler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +17,7 @@ class TestModule {
     @Singleton
     fun provideBackgroundWorkScheduler(
         @ApplicationContext context: Context
-    ): BackgroundWorkScheduler {
-        return BackgroundWorkScheduler(context)
+    ): DailySummaryWorkScheduler {
+        return DailySummaryWorkScheduler(context)
     }
 }

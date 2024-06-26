@@ -11,6 +11,7 @@ import com.shpak.stormalert.R
 
 object NotificationHelper {
 
+    // TODO: Adapt method to work with older APIs
     @RequiresApi(Build.VERSION_CODES.O)
     fun postNotification(
         context: Context,
@@ -36,6 +37,7 @@ object NotificationHelper {
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setPriority(NotificationManager.IMPORTANCE_MIN)
 
-        notificationManager.notify(1, notificationBuilder.build())
+        // TODO: Use another ID
+        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
     }
 }

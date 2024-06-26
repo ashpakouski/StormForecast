@@ -3,6 +3,7 @@ package com.shpak.stormalert.data.util
 import android.content.Context
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ListenableWorker
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
@@ -10,17 +11,17 @@ import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class BackgroundWorkScheduler @Inject constructor(
+class DailySummaryWorkScheduler @Inject constructor(
     context: Context
 ) {
     private val workManager = WorkManager.getInstance(context)
 
-    fun scheduleJob() {
-        val testJobClass = TestWorkerJob::class.java
-        val testJobId = "test_job_id"
-
-        val targetHour = 20
-        val targetMinute = 0
+    fun scheduleJob(
+        job: Class<out ListenableWorker> = DailySummaryJob::class.java,
+        jobId: String = "job_id_daily_summary"
+    ) {
+        val targetHour = 21
+        val targetMinute = 50
         val targetOffsetSeconds = targetHour * 60 * 60 + targetMinute * 60
 
         val calendar = Calendar.getInstance()
@@ -33,9 +34,9 @@ class BackgroundWorkScheduler @Inject constructor(
                 if (targetOffsetSeconds > currentOffsetSeconds) 0 else 24 * 60 * 60
 
         val workRequest = PeriodicWorkRequest.Builder(
-            testJobClass,
-            1L,
-            TimeUnit.DAYS
+            job,
+            6L,
+            TimeUnit.HOURS
         ).setConstraints(
             Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -44,7 +45,7 @@ class BackgroundWorkScheduler @Inject constructor(
             .build()
 
         workManager.enqueueUniquePeriodicWork(
-            testJobId,
+            jobId,
             ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
             workRequest
         )
