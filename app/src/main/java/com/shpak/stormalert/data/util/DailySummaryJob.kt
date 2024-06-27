@@ -2,7 +2,6 @@ package com.shpak.stormalert.data.util
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -38,8 +37,6 @@ class DailySummaryJob @AssistedInject constructor(
                             futureCalendar.get(Calendar.YEAR) == now.get(Calendar.YEAR) + 1
                 }
 
-                Log.d("TAG123", "Tomorrow forecast: $tomorrowForecast")
-
                 val tomorrowMin = tomorrowForecast.minBy { it.kpValue }.kpValue
                 val tomorrowMax = tomorrowForecast.maxBy { it.kpValue }.kpValue
 
@@ -56,7 +53,5 @@ class DailySummaryJob @AssistedInject constructor(
 
             is Resource.Error -> return Result.failure()
         }
-
-        return Result.success()
     }
 }

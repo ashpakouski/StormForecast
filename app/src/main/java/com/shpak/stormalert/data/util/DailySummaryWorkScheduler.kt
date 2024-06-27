@@ -1,53 +1,31 @@
 package com.shpak.stormalert.data.util
 
-import android.content.Context
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.ListenableWorker
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class DailySummaryWorkScheduler @Inject constructor(
-    context: Context
-) {
-    private val workManager = WorkManager.getInstance(context)
+object DailySummaryWorkScheduler {
+
+    private val job = DailySummaryJob::class.java
+
+    private const val JOB_ID = "job_id_daily_summary"
+    private const val REPEAT_INTERVAL_MILLIS = 6 * 60 * 60 * 1000L // 6 hours
 
     fun scheduleJob(
-        job: Class<out ListenableWorker> = DailySummaryJob::class.java,
-        jobId: String = "job_id_daily_summary"
+        jobScheduler: JobScheduler
     ) {
-        val targetHour = 21
-        val targetMinute = 50
-        val targetOffsetSeconds = targetHour * 60 * 60 + targetMinute * 60
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 21)
+            set(Calendar.MINUTE, 20)
+            set(Calendar.SECOND, 0)
+        }
 
-        val calendar = Calendar.getInstance()
-        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
-        val currentMinute = calendar.get(Calendar.MINUTE)
-        val currentSecond = calendar.get(Calendar.SECOND)
-        val currentOffsetSeconds = currentHour * 60 * 60 + currentMinute * 60 + currentSecond
+        val now = Calendar.getInstance()
 
-        val initialDelaySeconds = targetOffsetSeconds - currentOffsetSeconds +
-                if (targetOffsetSeconds > currentOffsetSeconds) 0 else 24 * 60 * 60
+        if (now.after(calendar)) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1)
+        }
 
-        val workRequest = PeriodicWorkRequest.Builder(
-            job,
-            6L,
-            TimeUnit.HOURS
-        ).setConstraints(
-            Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-        ).setInitialDelay(initialDelaySeconds.toLong(), TimeUnit.SECONDS)
-            .build()
+        val initialDelayMillis = calendar.timeInMillis - now.timeInMillis
 
-        workManager.enqueueUniquePeriodicWork(
-            jobId,
-            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-            workRequest
-        )
+        jobScheduler.schedule(job, JOB_ID, REPEAT_INTERVAL_MILLIS, initialDelayMillis)
     }
 }

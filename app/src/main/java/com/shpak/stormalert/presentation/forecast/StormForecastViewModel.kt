@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shpak.stormalert.data.util.DailySummaryWorkScheduler
+import com.shpak.stormalert.data.util.JobScheduler
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
@@ -19,7 +20,7 @@ class StormForecastViewModel @Inject constructor(
     private val geomagneticRepository: GeomagneticRepository,
     private val uiInteractionRepository: UiInteractionRepository,
     private val notificationSettingsRepository: NotificationSettingsRepository,
-    private val dailySummaryWorkScheduler: DailySummaryWorkScheduler
+    private val jobScheduler: JobScheduler
 ) : ViewModel() {
 
     var state by mutableStateOf(StormForecastState())
@@ -61,6 +62,6 @@ class StormForecastViewModel @Inject constructor(
     }
 
     private fun scheduleTestWork() {
-        dailySummaryWorkScheduler.scheduleJob()
+        DailySummaryWorkScheduler.scheduleJob(jobScheduler)
     }
 }
