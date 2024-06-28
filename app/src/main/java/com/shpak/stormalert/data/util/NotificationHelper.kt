@@ -21,7 +21,7 @@ object NotificationHelper {
         text: String? = null
     ) {
         val notificationChannel = NotificationChannel(
-            channelId, channelName, NotificationManager.IMPORTANCE_MIN
+            channelId, channelName, NotificationManager.IMPORTANCE_HIGH
         )
 
         val notificationManager = context.getSystemService(
@@ -35,7 +35,7 @@ object NotificationHelper {
                 .setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(R.drawable.ic_notification_icon)
-                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setPriority(NotificationManager.IMPORTANCE_HIGH)
 
         // TODO: Use another ID
         notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())

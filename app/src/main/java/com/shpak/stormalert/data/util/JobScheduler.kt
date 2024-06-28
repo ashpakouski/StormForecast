@@ -11,6 +11,8 @@ interface JobScheduler {
         initialDelayMillis: Long = 0L
     )
 
+    fun cancel(jobId: String)
+
     // fun schedule(
     //     job: Class<out ListenableWorker>,
     //     jobId: String,

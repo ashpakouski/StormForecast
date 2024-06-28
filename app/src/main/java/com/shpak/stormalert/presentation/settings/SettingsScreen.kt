@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -64,37 +63,35 @@ private fun SettingsScreen(
             .verticalScroll(rememberScrollState())
             .padding(innerPadding)
     ) {
-        SettingsSwitch(
-            title = "Storm ahead",
-            subtitle = "Storm with a Kp index >= N is forecasted to occur in the near future",
-            isChecked = true,
-            onCheckedChange = {},
-            actionButtonTitle = "Configure alert",
-            onActionButtonClick = {},
-            paddingHorizontal = 16.dp
-        )
-
-        Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
-
-        SettingsSwitch(
-            title = "Sudden increase",
-            subtitle = "Current Kp index shows an unexpected increase compared to forecasted values",
-            isChecked = false,
-            onCheckedChange = {},
-            actionButtonTitle = "Configure alert",
-            onActionButtonClick = {},
-            paddingHorizontal = 16.dp
-        )
-
-        Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
+//        SettingsSwitch(
+//            title = "Storm ahead",
+//            subtitle = "Storm with a Kp index >= N is forecasted to occur in the near future",
+//            isChecked = true,
+//            onCheckedChange = {},
+//            actionButtonTitle = "Configure alert",
+//            onActionButtonClick = {},
+//            paddingHorizontal = 16.dp
+//        )
+//
+//        Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
+//
+//        SettingsSwitch(
+//            title = "Sudden increase",
+//            subtitle = "Current Kp index shows an unexpected increase compared to forecasted values",
+//            isChecked = false,
+//            onCheckedChange = {},
+//            actionButtonTitle = "Configure alert",
+//            onActionButtonClick = {},
+//            paddingHorizontal = 16.dp
+//        )
+//
+//        Spacer(modifier = Modifier.size(height = 16.dp, width = 1.dp))
 
         SettingsSwitch(
             title = "Daily forecast",
             subtitle = "Receive a daily summary of the expected magnetic activity level for the following day",
-            isChecked = true,
-            onCheckedChange = {},
-            actionButtonTitle = "Configure alert",
-            onActionButtonClick = {},
+            isChecked = viewModel.state.isDailyForecastEnabled,
+            onCheckedChange = viewModel::onDailyForecastSwitchChange,
             paddingHorizontal = 16.dp
         )
     }

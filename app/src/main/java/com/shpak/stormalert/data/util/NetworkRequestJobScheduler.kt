@@ -36,4 +36,8 @@ class NetworkRequestJobScheduler @Inject constructor(
             jobId, ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, workRequest
         )
     }
+
+    override fun cancel(jobId: String) {
+        workManager.cancelUniqueWork(jobId)
+    }
 }

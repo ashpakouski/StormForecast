@@ -18,6 +18,7 @@ class AppNotificationSettingsRepository @Inject constructor(
 
     private companion object {
         val KEY_ARE_NOTIFICATIONS_ENABLED = booleanPreferencesKey("key_notifications_enabled")
+        val KEY_IS_DAILY_FORECAST_ENABLED = booleanPreferencesKey("key_daily_forecast_enabled")
     }
 
     override suspend fun areNotificationsEnabled(): Boolean =
@@ -25,4 +26,10 @@ class AppNotificationSettingsRepository @Inject constructor(
 
     override suspend fun setNotificationsEnabled(areEnabled: Boolean) =
         context.dataStore.set(KEY_ARE_NOTIFICATIONS_ENABLED, areEnabled)
+
+    override suspend fun isDailyForecastEnabled(): Boolean =
+        context.dataStore.get(KEY_IS_DAILY_FORECAST_ENABLED, true)
+
+    override suspend fun setDailyForecastEnabled(isEnabled: Boolean) =
+        context.dataStore.set(KEY_IS_DAILY_FORECAST_ENABLED, isEnabled)
 }
