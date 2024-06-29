@@ -1,12 +1,14 @@
 package com.shpak.stormalert.data.util
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.shpak.stormalert.domain.repository.GeomagneticRepository
 import com.shpak.stormalert.domain.util.Resource
+import com.shpak.stormalert.presentation.MainActivity
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.util.Calendar
@@ -44,7 +46,8 @@ class DailySummaryJob @AssistedInject constructor(
                     NotificationHelper.postNotification(
                         applicationContext,
                         title = "$tomorrowMin / $tomorrowMax Kp tomorrow",
-                        text = "Now: ${Date()}"
+                        text = "Now: ${Date()}",
+                        actionIntent = Intent(applicationContext, MainActivity::class.java)
                     )
                 }
 
