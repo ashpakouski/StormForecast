@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.shpak.stormalert.data.util.DailySummaryWorkScheduler
+import com.shpak.stormalert.data.util.DailySummaryJob
 import com.shpak.stormalert.data.util.JobScheduler
 import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,9 +31,9 @@ class SettingsViewModel @Inject constructor(
 
     fun onDailyForecastSwitchChange(shouldSendDailyForecast: Boolean) {
         if (shouldSendDailyForecast) {
-            DailySummaryWorkScheduler.scheduleJob(jobScheduler)
+            DailySummaryJob.schedule(jobScheduler)
         } else {
-            DailySummaryWorkScheduler.cancel(jobScheduler)
+            DailySummaryJob.cancel(jobScheduler)
         }
 
         viewModelScope.launch {

@@ -18,16 +18,44 @@ import java.util.Date
 class DailySummaryJob @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted params: WorkerParameters,
-    private val forecastRepository: GeomagneticRepository
+    private val forecastRepository: GeomagneticRepository,
+    private val jobScheduler: JobScheduler
 ) : CoroutineWorker(appContext, params) {
 
-    override suspend fun doWork(): Result {
+    companion object {
+        private const val JOB_ID = "job_id.daily_summary"
 
+        private val scheduleTo = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 20)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+
+        fun schedule(jobScheduler: JobScheduler) {
+            val currentTime = Calendar.getInstance()
+
+            if (currentTime.after(scheduleTo)) {
+                scheduleTo.add(Calendar.DAY_OF_YEAR, 1)
+            }
+
+            val initialDelayMillis = scheduleTo.timeInMillis - currentTime.timeInMillis
+
+            jobScheduler.schedule(
+                DailySummaryJob::class.java, JOB_ID, initialDelayMillis
+            )
+        }
+
+        fun cancel(jobScheduler: JobScheduler) {
+            jobScheduler.cancel(JOB_ID)
+        }
+    }
+
+    override suspend fun doWork(): Result {
         when (
             val forecast = forecastRepository.getGeomagneticForecast()
         ) {
             is Resource.Success -> {
-                val geomagneticData = forecast.data?.forecast ?: return Result.failure()
+                val geomagneticData = forecast.data?.forecast ?: return Result.retry()
 
                 val now = Calendar.getInstance()
 
@@ -51,10 +79,12 @@ class DailySummaryJob @AssistedInject constructor(
                     )
                 }
 
+                schedule(jobScheduler)
+
                 return Result.success()
             }
 
-            is Resource.Error -> return Result.failure()
+            is Resource.Error -> return Result.retry()
         }
     }
 }
