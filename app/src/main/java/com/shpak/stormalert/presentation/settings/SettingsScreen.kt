@@ -1,13 +1,13 @@
 package com.shpak.stormalert.presentation.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,12 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shpak.stormalert.R
-import com.shpak.stormalert.presentation.util.formatDay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +42,7 @@ fun SettingsScreen(
                 title = {
                     Text(
                         stringResource(R.string.settings_title),
-                        fontWeight = FontWeight(500)
+                        fontWeight = FontWeight.W500
                     )
                 },
             )
@@ -64,32 +62,37 @@ private fun SettingsScreen(
             .verticalScroll(rememberScrollState())
             .padding(innerPadding)
     ) {
-        SettingsSection(name = "Notifications", modifier = Modifier.padding(16.dp)) {
+        SettingsSection(
+            name = "Notifications",
+            modifier = Modifier.padding(16.dp)
+        ) {
             SettingsSwitch(
                 title = "Daily forecast",
                 subtitle = "Receive a daily summary of the expected magnetic activity level for the following day",
                 isChecked = viewModel.state.isDailyForecastEnabled,
                 onCheckedChange = viewModel::onDailyForecastSwitchChange
             )
+        }
 
-//            SettingsSwitch(
-//                title = "Storm ahead",
-//                subtitle = "Storm with a Kp index >= N is forecasted to occur in the near future",
-//                isChecked = true,
-//                onCheckedChange = {},
-//                //actionButtonTitle = "Configure alert",
-//                //onActionButtonClick = {},
-//            )
-//
-//            SettingsSwitch(
-//                title = "Sudden increase",
-//                subtitle = "Current Kp index shows an unexpected increase compared to forecasted values",
-//                isChecked = false,
-//                onCheckedChange = {},
-//                //actionButtonTitle = "Configure alert",
-//                //onActionButtonClick = {},
-//                //paddingHorizontal = 16.dp
-//            )
+        SettingsSection(
+            name = "Available soon",
+            modifier = Modifier.padding(16.dp)
+        ) {
+            SettingsSwitch(
+                title = "Storm ahead",
+                subtitle = "Storm with a Kp index >= 4.0 is forecasted to occur in the near future",
+                isChecked = false,
+                onCheckedChange = {},
+                isEnabled = false
+            )
+
+            SettingsSwitch(
+                title = "Sudden increase",
+                subtitle = "Current Kp index shows an unexpected increase compared to forecasted values",
+                isChecked = false,
+                onCheckedChange = {},
+                isEnabled = false
+            )
         }
     }
 }
@@ -98,16 +101,21 @@ private fun SettingsScreen(
 private fun SettingsSection(
     name: String,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     Column(modifier = modifier) {
         Text(
             text = name,
-            modifier = Modifier.padding(top = 12.dp, bottom = 4.dp),
-            fontWeight = FontWeight(550)
+            modifier = Modifier.padding(top = 16.dp, bottom = 12.dp),
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface
         )
 
-        content()
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            content()
+        }
     }
 }
 
@@ -119,24 +127,27 @@ private fun SettingsSwitch(
     onCheckedChange: (isChecked: Boolean) -> Unit,
     actionButtonTitle: String? = null,
     onActionButtonClick: (() -> Unit)? = null,
+    isEnabled: Boolean = true
 ) {
     assert((actionButtonTitle == null && onActionButtonClick == null) || (actionButtonTitle != null && onActionButtonClick != null))
 
-    Column {
-        SwitchDecorated(
+    Column(
+        modifier = Modifier.alpha(if (isEnabled) 1.0f else 0.5f)
+    ) {
+        DecoratedSwitch(
             title = title,
             subtitle = subtitle,
             isChecked = isChecked,
             onCheckedChange = onCheckedChange,
-            //paddingHorizontal = paddingHorizontal
+            isEnabled = isEnabled
         )
 
         if (actionButtonTitle != null && onActionButtonClick != null) {
             ConfigurationButton(
                 title = actionButtonTitle,
                 onActionButtonClick = onActionButtonClick,
-                modifier = Modifier.padding(vertical = 8.dp,
-                //    horizontal = paddingHorizontal
+                modifier = Modifier.padding(
+                    top = 4.dp
                 )
             )
         }
@@ -144,12 +155,12 @@ private fun SettingsSwitch(
 }
 
 @Composable
-private fun SwitchDecorated(
+private fun DecoratedSwitch(
     title: String,
-    subtitle: String? = null,
     isChecked: Boolean,
     onCheckedChange: (isChecked: Boolean) -> Unit,
-    // paddingHorizontal: Dp
+    subtitle: String? = null,
+    isEnabled: Boolean = true
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -159,8 +170,6 @@ private fun SwitchDecorated(
                 onCheckedChange(!isChecked)
             }
     ) {
-        // Spacer(modifier = Modifier.width(paddingHorizontal))
-
         Column(
             modifier = Modifier
                 .weight(1.0f)
@@ -180,10 +189,9 @@ private fun SwitchDecorated(
 
         Switch(
             checked = isChecked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            enabled = isEnabled
         )
-
-        // Spacer(modifier = Modifier.width(paddingHorizontal))
     }
 }
 
