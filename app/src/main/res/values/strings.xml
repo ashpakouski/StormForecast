@@ -2,12 +2,23 @@
     <string name="app_name">Storm Forecast</string>
     <string name="max_value_title">Max in last 24 hours</string>
     <string name="error_forecast_fetch_failed">Forecast could not be loaded. Please, check your Internet connection and try again</string>
-    <string name="settings_title">Settings</string>
-    <string name="settings_group_notifications">Notifications</string>
 
     <!--  Pre notifications permission request dialog  -->
     <string name="pre_notifications_permission_request_dialog_title">Want to stay ahead of Magnetic Storms?</string>
     <string name="pre_notifications_permission_request_dialog_description">Get quick updates on geomagnetic activity like upcoming storms, Kp index changes and daily forecasts. You can adjust your notifications anytime in settings.</string>
     <string name="pre_notifications_permission_request_dialog_button_positive">Yes, notify me</string>
     <string name="pre_notifications_permission_request_dialog_button_negative">No, thanks</string>
+
+    <!--  Settings  -->
+    <string name="settings_screen_title">Settings</string>
+
+    <string name="settings_section_notifications">Notifications</string>
+    <string name="settings_section_available_soon">Available soon</string>
+
+    <string name="setting_daily_forecast_title">Daily forecast</string>
+    <string name="setting_daily_forecast_description">Receive a daily summary of the expected magnetic activity level for the following day</string>
+    <string name="setting_storm_ahead_title">Storm ahead</string>
+    <string name="setting_storm_ahead_description">Storm with a Kp index >= 4.0 is forecasted to occur in the near future</string>
+    <string name="setting_sudden_increase_title">Sudden increase</string>
+    <string name="setting_sudden_increase_description">Current Kp index shows an unexpected increase compared to forecasted values</string>
 </resources>

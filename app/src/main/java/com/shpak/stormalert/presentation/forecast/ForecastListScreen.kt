@@ -121,7 +121,7 @@ private fun AppBar(
                 IconButton(onClick = onOpenSettings) {
                     Icon(
                         imageVector = Icons.Filled.Settings,
-                        contentDescription = stringResource(R.string.settings_title)
+                        contentDescription = stringResource(R.string.settings_screen_title)
                     )
                 }
             }

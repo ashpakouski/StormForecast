@@ -41,7 +41,7 @@ fun SettingsScreen(
                 ),
                 title = {
                     Text(
-                        stringResource(R.string.settings_title),
+                        stringResource(R.string.settings_screen_title),
                         fontWeight = FontWeight.W500
                     )
                 },
@@ -63,32 +63,32 @@ private fun SettingsScreen(
             .padding(innerPadding)
     ) {
         SettingsSection(
-            name = "Notifications",
+            name = stringResource(R.string.settings_section_notifications),
             modifier = Modifier.padding(16.dp)
         ) {
             SettingsSwitch(
-                title = "Daily forecast",
-                subtitle = "Receive a daily summary of the expected magnetic activity level for the following day",
+                title = stringResource(R.string.setting_daily_forecast_title),
+                subtitle = stringResource(R.string.setting_daily_forecast_description),
                 isChecked = viewModel.state.isDailyForecastEnabled,
                 onCheckedChange = viewModel::onDailyForecastSwitchChange
             )
         }
 
         SettingsSection(
-            name = "Available soon",
+            name = stringResource(R.string.settings_section_available_soon),
             modifier = Modifier.padding(16.dp)
         ) {
             SettingsSwitch(
-                title = "Storm ahead",
-                subtitle = "Storm with a Kp index >= 4.0 is forecasted to occur in the near future",
+                title = stringResource(R.string.setting_storm_ahead_title),
+                subtitle = stringResource(R.string.setting_storm_ahead_description),
                 isChecked = false,
                 onCheckedChange = {},
                 isEnabled = false
             )
 
             SettingsSwitch(
-                title = "Sudden increase",
-                subtitle = "Current Kp index shows an unexpected increase compared to forecasted values",
+                title = stringResource(R.string.setting_sudden_increase_title),
+                subtitle = stringResource(R.string.setting_sudden_increase_description),
                 isChecked = false,
                 onCheckedChange = {},
                 isEnabled = false
