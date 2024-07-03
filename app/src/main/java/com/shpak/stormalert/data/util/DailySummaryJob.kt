@@ -25,20 +25,22 @@ class DailySummaryJob @AssistedInject constructor(
     companion object {
         private const val JOB_ID = "job_id.daily_summary"
 
-        private val scheduleTo = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 20)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-        }
+        private val scheduleTo: Calendar
+            get() = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 20)
+                set(Calendar.MINUTE, 0)
+                set(Calendar.SECOND, 0)
+            }
 
         fun schedule(jobScheduler: JobScheduler) {
             val currentTime = Calendar.getInstance()
+            val scheduledTime = scheduleTo
 
-            if (currentTime.after(scheduleTo)) {
+            if (currentTime.after(scheduledTime)) {
                 scheduleTo.add(Calendar.DAY_OF_YEAR, 1)
             }
 
-            val initialDelayMillis = scheduleTo.timeInMillis - currentTime.timeInMillis
+            val initialDelayMillis = scheduledTime.timeInMillis - currentTime.timeInMillis
 
             jobScheduler.schedule(
                 DailySummaryJob::class.java, JOB_ID, initialDelayMillis
