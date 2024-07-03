@@ -7,14 +7,12 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.shpak.stormalert.R
 
 object NotificationHelper {
 
     // TODO: Adapt method to work with older APIs
-    @RequiresApi(Build.VERSION_CODES.O)
     fun postNotification(
         context: Context,
         channelId: String = "ID_DEFAULT",
@@ -23,35 +21,40 @@ object NotificationHelper {
         text: String? = null,
         actionIntent: Intent? = null
     ) {
-        val notificationChannel = NotificationChannel(
-            channelId, channelName, NotificationManager.IMPORTANCE_HIGH
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId, channelName, NotificationManager.IMPORTANCE_LOW
+            )
 
-        val notificationManager = context.getSystemService(
-            Service.NOTIFICATION_SERVICE
-        ) as NotificationManager
+            val notificationManager = context.getSystemService(
+                Service.NOTIFICATION_SERVICE
+            ) as NotificationManager
 
-        notificationManager.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
 
-        val notificationBuilder =
-            NotificationCompat.Builder(context, channelId)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setSmallIcon(R.drawable.ic_notification_icon)
-                .setPriority(NotificationManager.IMPORTANCE_HIGH)
-                .run {
-                    if (actionIntent != null) {
-                        val pendingIntent = PendingIntent.getActivity(
-                            context, 0, actionIntent, PendingIntent.FLAG_IMMUTABLE
-                        )
-                        setContentIntent(pendingIntent)
-                        setAutoCancel(true)
-                    } else {
-                        this
+            val notificationBuilder =
+                NotificationCompat.Builder(context, channelId)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setSmallIcon(R.drawable.ic_notification_icon)
+                    .setPriority(NotificationManager.IMPORTANCE_LOW)
+                    .run {
+                        if (actionIntent != null) {
+                            val pendingIntent = PendingIntent.getActivity(
+                                context, 0, actionIntent, PendingIntent.FLAG_IMMUTABLE
+                            )
+                            setContentIntent(pendingIntent)
+                            setAutoCancel(true)
+                        } else {
+                            this
+                        }
                     }
-                }
 
-        // TODO: Use another ID
-        notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
+            // TODO: Use another ID
+            notificationManager.notify(
+                System.currentTimeMillis().toInt(),
+                notificationBuilder.build()
+            )
+        }
     }
 }

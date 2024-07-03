@@ -21,4 +21,8 @@
     <string name="setting_storm_ahead_description">Storm with a Kp index >= 4.0 is forecasted to occur in the near future</string>
     <string name="setting_sudden_increase_title">Sudden increase</string>
     <string name="setting_sudden_increase_description">Current Kp index shows an unexpected increase compared to forecasted values</string>
+
+    <!--  Notifications -->
+    <string name="notification_daily_summary_template">From %f to %f Kp tomorrow</string>
+    <string name="notification_daily_summary_body">Tap to see more</string>
 </resources>
