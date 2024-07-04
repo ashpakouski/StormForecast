@@ -36,7 +36,7 @@ class DailySummaryJob @AssistedInject constructor(
             val scheduledTime = scheduleTo
 
             if (currentTime.after(scheduledTime)) {
-                scheduleTo.add(Calendar.DAY_OF_YEAR, 1)
+                scheduledTime.add(Calendar.DAY_OF_YEAR, 1)
             }
 
             val initialDelayMillis = scheduledTime.timeInMillis - currentTime.timeInMillis
