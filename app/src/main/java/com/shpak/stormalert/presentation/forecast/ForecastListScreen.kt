@@ -107,8 +107,9 @@ private fun AppBar(
             .shadow(if (scrollBehavior.state.contentOffset < -3) 8.dp else 0.dp)
     ) {
         TopAppBar(
-            colors = TopAppBarDefaults.smallTopAppBarColors(
-                containerColor = MaterialTheme.colorScheme.background
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                scrolledContainerColor = MaterialTheme.colorScheme.background
             ),
             title = {
                 Text(
