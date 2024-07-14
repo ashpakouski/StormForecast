@@ -97,6 +97,11 @@ dependencies {
     // Local data
     implementation "androidx.datastore:datastore-preferences:1.1.1"
 
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
     // Navigation
     def nav_version = "2.7.7"
     implementation "androidx.navigation:navigation-compose:$nav_version"

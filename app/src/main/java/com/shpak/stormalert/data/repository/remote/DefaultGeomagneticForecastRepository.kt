@@ -1,17 +1,18 @@
-package com.shpak.stormalert.data.repository
+package com.shpak.stormalert.data.repository.remote
 
 import com.shpak.stormalert.data.mappers.toGeomagneticForecast
 import com.shpak.stormalert.data.network.TextDataSource
 import com.shpak.stormalert.domain.model.GeomagneticForecast
-import com.shpak.stormalert.domain.repository.GeomagneticRepository
+import com.shpak.stormalert.domain.repository.GeomagneticForecastRepository
 import com.shpak.stormalert.domain.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class DefaultGeomagneticRepository @Inject constructor(
+class DefaultGeomagneticForecastRepository @Inject constructor(
     private val textDataSource: TextDataSource
-) : GeomagneticRepository {
+) : GeomagneticForecastRepository {
+
     override suspend fun getGeomagneticForecast(): Resource<GeomagneticForecast> {
         return try {
             withContext(Dispatchers.Default) {

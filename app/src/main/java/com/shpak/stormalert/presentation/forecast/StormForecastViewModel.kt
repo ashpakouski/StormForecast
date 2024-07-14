@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.shpak.stormalert.data.util.DailySummaryJob
 import com.shpak.stormalert.data.util.JobScheduler
-import com.shpak.stormalert.domain.repository.GeomagneticRepository
+import com.shpak.stormalert.domain.repository.GeomagneticForecastRepository
 import com.shpak.stormalert.domain.repository.NotificationSettingsRepository
 import com.shpak.stormalert.domain.repository.UiInteractionRepository
 import com.shpak.stormalert.domain.util.Resource
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StormForecastViewModel @Inject constructor(
-    private val geomagneticRepository: GeomagneticRepository,
+    private val forecastRepository: GeomagneticForecastRepository,
     private val uiInteractionRepository: UiInteractionRepository,
     private val notificationSettingsRepository: NotificationSettingsRepository,
     private val jobScheduler: JobScheduler
@@ -34,7 +34,7 @@ class StormForecastViewModel @Inject constructor(
                 isPreNotificationsPermissionDialogActive = !uiInteractionRepository.isPreNotificationPermissionDialogShown()
             )
 
-            val forecast = geomagneticRepository.getGeomagneticForecast()
+            val forecast = forecastRepository.getGeomagneticForecast()
 
             state = when (forecast) {
                 is Resource.Success -> {

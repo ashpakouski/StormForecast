@@ -6,7 +6,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.shpak.stormalert.R
-import com.shpak.stormalert.domain.repository.GeomagneticRepository
+import com.shpak.stormalert.domain.repository.GeomagneticForecastRepository
 import com.shpak.stormalert.domain.util.Resource
 import com.shpak.stormalert.presentation.MainActivity
 import dagger.assisted.Assisted
@@ -17,7 +17,7 @@ import java.util.Calendar
 class DailySummaryJob @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted params: WorkerParameters,
-    private val forecastRepository: GeomagneticRepository,
+    private val forecastRepository: GeomagneticForecastRepository,
     private val jobScheduler: JobScheduler
 ) : CoroutineWorker(appContext, params) {
 

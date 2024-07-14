@@ -1,4 +1,4 @@
-package com.shpak.stormalert.data.repository
+package com.shpak.stormalert.data.repository.local
 
 import android.content.Context
 import androidx.datastore.core.DataStore
