@@ -68,12 +68,6 @@ dependencies {
     // Work
     implementation("androidx.work:work-runtime-ktx:2.10.0")
 
-    // System UI
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
-
-    // Permissions
-    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
-
     // Icons
     implementation("androidx.compose.material:material-icons-extended:1.7.5")
 
