@@ -2,6 +2,7 @@ package com.shpak.stormalert.presentation.forecast
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -57,17 +59,20 @@ fun ForecastListScreen(
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    Scaffold(
-        topBar = {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) {
+        Column {
             AppBar(scrollBehavior, onOpenSettings)
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { innerPadding ->
-        ForecastScreen(viewModel, innerPadding)
+            ForecastScreen(viewModel)
+        }
         NotificationsPermissionRequestFlow(viewModel)
     }
 }
 
+@Deprecated("Ugh")
 @Composable
 private fun NotificationsPermissionRequestFlow(viewModel: StormForecastViewModel) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -104,7 +109,7 @@ private fun AppBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(if (scrollBehavior.state.contentOffset < -3) 8.dp else 0.dp)
+            // .shadow(if (scrollBehavior.state.contentOffset < -3) 4.dp else 0.dp)
     ) {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
@@ -117,6 +122,7 @@ private fun AppBar(
                     fontWeight = FontWeight.Medium
                 )
             },
+            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             scrollBehavior = scrollBehavior,
             actions = {
                 IconButton(onClick = onOpenSettings) {
@@ -132,12 +138,12 @@ private fun AppBar(
 
 @Composable
 private fun ForecastScreen(
-    viewModel: StormForecastViewModel,
-    innerPadding: PaddingValues
+    viewModel: StormForecastViewModel //,
+    // innerPadding: PaddingValues
 ) {
     Box(
         modifier = Modifier
-            .padding(top = innerPadding.calculateTopPadding())
+            // .padding(top = innerPadding.calculateTopPadding())
             .fillMaxSize()
     ) {
         if (viewModel.state.isLoading) {
