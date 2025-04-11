@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import kotlin.math.min
 
 @Composable
-fun WorldMap(
+fun PinchToZoomImage(
     bitmap: Bitmap,
     modifier: Modifier = Modifier,
     scaleMin: Float = 1.0f,
