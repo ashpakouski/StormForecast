@@ -1,7 +1,6 @@
 package com.shpak.stormalert.presentation.map
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -17,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.asImageBitmap
@@ -30,7 +30,7 @@ fun PinchToZoomImage(
     modifier: Modifier = Modifier,
     scaleMin: Float = 1.0f,
     scaleMax: Float = 3.0f,
-    drawAbove: DrawScope.(scale: Float, offset: Offset) -> Unit = { _, _ -> }
+    drawAbove: DrawScope.() -> Unit = { }
 ) {
     var scale by remember { mutableFloatStateOf(1f) }
     var offset by remember { mutableStateOf(Offset.Zero) }
@@ -82,13 +82,11 @@ fun PinchToZoomImage(
                     }
                     .transformable(state)
                     .align(Alignment.Center)
+                    .drawWithContent {
+                        drawContent()
+                        drawAbove()
+                    }
             )
-
-            Canvas(
-                modifier = Modifier.matchParentSize()
-            ) {
-                drawAbove(scale, offset)
-            }
         }
     }
 }
